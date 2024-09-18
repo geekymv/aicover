@@ -1,40 +1,13 @@
-import AWS from "aws-sdk";
-import { Readable } from "stream";
-import axios from "axios";
-import fs from "fs";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_AK,
-  secretAccessKey: process.env.AWS_SK,
+const s3 = new S3Client({
+  region: "auto",
   endpoint: process.env.AWS_ENDPOINT,
-  s3ForcePathStyle: true,
-  signatureVersion: "v4",
+  credentials: {
+    accessKeyId: process.env.AWS_AK || "",
+    secretAccessKey: process.env.AWS_SK || "",
+  },
 });
-
-export async function downloadAndUploadImage(
-  imageUrl: string,
-  bucketName: string,
-  s3Key: string
-) {
-  try {
-    const response = await axios({
-      method: "GET",
-      url: imageUrl,
-      responseType: "stream",
-    });
-
-    const uploadParams = {
-      Bucket: bucketName,
-      Key: s3Key,
-      Body: response.data as Readable,
-    };
-
-    return s3.upload(uploadParams).promise();
-  } catch (e) {
-    console.log("upload failed:", e);
-    throw e;
-  }
-}
 
 export async function uploadImage(
   imageBuffer: Buffer,
@@ -48,38 +21,47 @@ export async function uploadImage(
       Body: imageBuffer,
     };
 
-    return s3.upload(uploadParams).promise();
+    return s3.send(new PutObjectCommand(uploadParams));
   } catch (e) {
     console.log("upload failed:", e);
     throw e;
   }
 }
 
-export async function downloadImage(imageUrl: string, outputPath: string) {
+export async function downloadImage(imageUrl: string): Promise<ArrayBuffer> {
   try {
-    const response = await axios({
-      method: "GET",
-      url: imageUrl,
-      responseType: "stream",
-    });
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.arrayBuffer();
+  } catch (e) {
+    console.log("download failed:", e);
+    throw e;
+  }
+}
 
-    return new Promise((resolve, reject) => {
-      const writer = fs.createWriteStream(outputPath);
-      response.data.pipe(writer);
+export async function downloadAndUploadImage(
+  imageUrl: string,
+  bucketName: string,
+  s3Key: string
+) {
+  try {
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-      let error: Error | null = null;
-      writer.on("error", (err) => {
-        error = err;
-        writer.close();
-        reject(err);
-      });
+    const arrayBuffer = await response.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
-      writer.on("close", () => {
-        if (!error) {
-          resolve(null);
-        }
-      });
-    });
+    const uploadParams = {
+      Bucket: bucketName,
+      Key: s3Key,
+      Body: buffer,
+    };
+
+    return s3.send(new PutObjectCommand(uploadParams));
   } catch (e) {
     console.log("upload failed:", e);
     throw e;

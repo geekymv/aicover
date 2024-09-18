@@ -1,49 +1,37 @@
 import { Order } from "@/types/order";
-import { QueryResultRow } from "pg";
-import { getDb } from "@/models/db";
+import { getSupabaseClient } from "@/models/db";
 
 export async function insertOrder(order: Order) {
-  const db = getDb();
-  const res = await db.query(
-    `INSERT INTO orders 
-        (order_no, created_at, user_email, amount, plan, expired_at, order_status, credits, currency, user_uuid) 
-        VALUES 
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-    `,
-    [
-      order.order_no,
-      order.created_at,
-      order.user_email,
-      order.amount,
-      order.plan,
-      order.expired_at,
-      order.order_status,
-      order.credits,
-      order.currency,
-      order.user_uuid,
-    ]
-  );
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase.from("orders").insert({
+    order_no: order.order_no,
+    created_at: order.created_at,
+    user_email: order.user_email,
+    amount: order.amount,
+    plan: order.plan,
+    expired_at: order.expired_at,
+    order_status: order.order_status,
+    credits: order.credits,
+    currency: order.currency,
+    user_uuid: order.user_uuid,
+  });
 
-  return res;
+  if (error) throw error;
+  return data;
 }
 
 export async function findOrderByOrderNo(
   order_no: number
 ): Promise<Order | undefined> {
-  const db = getDb();
-  const res = await db.query(
-    `SELECT * FROM orders WHERE order_no = $1 LIMIT 1`,
-    [order_no]
-  );
-  if (res.rowCount === 0) {
-    return undefined;
-  }
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .eq("order_no", order_no)
+    .single();
 
-  const { rows } = res;
-  const row = rows[0];
-  const order = formatOrder(row);
-
-  return order;
+  if (error) return undefined;
+  return data as Order;
 }
 
 export async function updateOrderStatus(
@@ -51,66 +39,45 @@ export async function updateOrderStatus(
   order_status: number,
   paied_at: string
 ) {
-  const db = getDb();
-  const res = await db.query(
-    `UPDATE orders SET order_status=$1, paied_at=$2 WHERE order_no=$3`,
-    [order_status, paied_at, order_no]
-  );
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from("orders")
+    .update({ order_status, paied_at })
+    .eq("order_no", order_no);
 
-  return res;
+  if (error) throw error;
+  return data;
 }
 
 export async function updateOrderSession(
   order_no: string,
   stripe_session_id: string
 ) {
-  const db = getDb();
-  const res = await db.query(
-    `UPDATE orders SET stripe_session_id=$1 WHERE order_no=$2`,
-    [stripe_session_id, order_no]
-  );
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from("orders")
+    .update({ stripe_session_id })
+    .eq("order_no", order_no);
 
-  return res;
+  if (error) throw error;
+  return data;
 }
 
 export async function getUserOrders(
   user_email: string
 ): Promise<Order[] | undefined> {
   const now = new Date().toISOString();
-  const db = getDb();
-  const res = await db.query(
-    `SELECT * FROM orders WHERE user_email = $1 AND order_status = 2 AND expired_at >= $2`,
-    [user_email, now]
-  );
-  if (res.rowCount === 0) {
-    return undefined;
-  }
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .eq("user_email", user_email)
+    .eq("order_status", 2)
+    .gte("expired_at", now);
 
-  let orders: Order[] = [];
-  const { rows } = res;
-  rows.forEach((row) => {
-    const order = formatOrder(row);
-    orders.push(order);
-  });
-
-  return orders;
+  if (error) return undefined;
+  return data as Order[];
 }
 
-function formatOrder(row: QueryResultRow): Order {
-  const order: Order = {
-    order_no: row.order_no,
-    created_at: row.created_at,
-    user_email: row.user_email,
-    amount: row.amount,
-    plan: row.plan,
-    expired_at: row.expired_at,
-    order_status: row.order_status,
-    paied_at: row.paied_at,
-    stripe_session_id: row.stripe_session_id,
-    credits: row.credits,
-    currency: row.currency,
-    user_uuid: row.user_uuid,
-  };
-
-  return order;
-}
+// The formatOrder function is no longer needed as Supabase
+// automatically formats the data into the correct type

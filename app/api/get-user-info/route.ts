@@ -6,6 +6,8 @@ import { currentUser } from "@clerk/nextjs";
 import { genUuid } from "@/lib";
 import { getUserCredits } from "@/services/order";
 
+export const runtime = "edge";
+
 export async function POST(req: Request) {
   const user = await currentUser();
   if (!user || !user.emailAddresses || user.emailAddresses.length === 0) {

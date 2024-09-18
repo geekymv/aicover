@@ -39,11 +39,11 @@ export default function () {
                 HeyBeauty AI Try-On
               </a>
               <a
-                href="https://aiwallpaper.shop?utm_source=aicover.design"
+                href="https://pagen.so?utm_source=aicover.design"
                 target="_blank"
                 className="font-inter font-light text-gray-500"
               >
-                AI Wallpaper
+                Pagen AI
               </a>
             </div>
             <div className="my-5 mr-8 flex max-w-[200px] grow basis-[100px] flex-col space-y-5 lg:mx-10 lg:mt-0">
@@ -80,9 +80,7 @@ export default function () {
           </div>
           <div className="mt-10 flex flex-col lg:mt-0">
             <div className="mb-4 flex flex-col items-center">
-              <p className="font-inter font-medium text-black">
-                🧧 红包封面分享交流
-              </p>
+              <p className="font-inter font-medium text-black"></p>
               <p className="font-inter ml-4 text-black">
                 <img
                   src={

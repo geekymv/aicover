@@ -1,143 +1,141 @@
-import { QueryResult, QueryResultRow } from "pg";
-
 import { Cover } from "@/types/cover";
-import { getDb } from "./db";
+import { getSupabaseClient } from "@/models/db";
 
 export async function insertCover(cover: Cover) {
-  const db = getDb();
-  const res = await db.query(
-    `INSERT INTO covers 
-        (user_email, img_description, img_size, img_url, llm_name, llm_params, created_at, uuid, status, user_uuid, is_uploaded) 
-        VALUES 
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-    `,
-    [
-      cover.user_email,
-      cover.img_description,
-      cover.img_size,
-      cover.img_url,
-      cover.llm_name,
-      cover.llm_params,
-      cover.created_at,
-      cover.uuid,
-      cover.status,
-      cover.user_uuid,
-      cover.is_uploaded,
-    ]
-  );
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase.from("covers").insert({
+    user_email: cover.user_email,
+    img_description: cover.img_description,
+    img_size: cover.img_size,
+    img_url: cover.img_url,
+    llm_name: cover.llm_name,
+    llm_params: cover.llm_params,
+    created_at: cover.created_at,
+    uuid: cover.uuid,
+    status: cover.status,
+    user_uuid: cover.user_uuid,
+    is_uploaded: cover.is_uploaded,
+  });
 
-  return res;
+  if (error) throw error;
+  return data;
 }
 
 export async function getCoversCount(): Promise<number> {
-  const db = getDb();
-  const res = await db.query(`SELECT count(1) as count FROM covers`);
-  if (res.rowCount === 0) {
-    return 0;
-  }
+  const supabase = getSupabaseClient();
+  const { count, error } = await supabase
+    .from("covers")
+    .select("*", { count: "exact", head: true });
 
-  const { rows } = res;
-  const row = rows[0];
-
-  return row.count;
+  if (error) throw error;
+  return count || 0;
 }
 
 export async function getUserCoversCount(user_email: string): Promise<number> {
-  const db = getDb();
-  const res = await db.query(
-    `SELECT count(1) as count FROM covers WHERE user_email = $1 and is_uploaded is not true`,
-    [user_email]
-  );
-  if (res.rowCount === 0) {
-    return 0;
-  }
+  const supabase = getSupabaseClient();
+  const { count, error } = await supabase
+    .from("covers")
+    .select("*", { count: "exact", head: true })
+    .eq("user_email", user_email)
+    .is("is_uploaded", false);
 
-  const { rows } = res;
-  const row = rows[0];
-
-  return row.count;
+  if (error) throw error;
+  return count || 0;
 }
 
 export async function findCoverById(id: number): Promise<Cover | undefined> {
-  const db = getDb();
-  const res = await db.query(
-    `select w.*, u.uuid as user_uuid, u.email as user_email, u.nickname as user_name, u.avatar_url as user_avatar from covers as w left join users as u on w.user_email = u.email where w.id = $1`,
-    [id]
-  );
-  if (res.rowCount === 0) {
-    return;
-  }
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from("covers")
+    .select(
+      `
+      *,
+      users:user_email (
+        uuid,
+        email,
+        nickname,
+        avatar_url
+      )
+    `
+    )
+    .eq("id", id)
+    .single();
 
-  const cover = formatCover(res.rows[0]);
-
-  return cover;
+  if (error) return undefined;
+  return formatCover(data);
 }
 
 export async function findCoverByUuid(
   uuid: string
 ): Promise<Cover | undefined> {
-  const db = getDb();
-  const res = await db.query(
-    `select w.*, u.uuid as user_uuid, u.email as user_email, u.nickname as user_name, u.avatar_url as user_avatar from covers as w left join users as u on w.user_email = u.email where w.uuid = $1`,
-    [uuid]
-  );
-  if (res.rowCount === 0) {
-    return;
-  }
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from("covers")
+    .select(
+      `
+      *,
+      users:user_email (
+        uuid,
+        email,
+        nickname,
+        avatar_url
+      )
+    `
+    )
+    .eq("uuid", uuid)
+    .single();
 
-  const cover = formatCover(res.rows[0]);
-
-  return cover;
+  if (error) return undefined;
+  return formatCover(data);
 }
 
 export async function getRandomCovers(
   page: number,
   limit: number
 ): Promise<Cover[]> {
-  if (page <= 0) {
-    page = 1;
-  }
-  if (limit <= 0) {
-    limit = 50;
-  }
-  const offset = (page - 1) * limit;
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from("covers")
+    .select(
+      `
+      *,
+      users:user_email (
+        uuid,
+        email,
+        nickname,
+        avatar_url
+      )
+    `
+    )
+    .eq("status", 1)
+    .order("created_at", { ascending: false })
+    .range((page - 1) * limit, page * limit - 1);
 
-  const db = getDb();
-  const res = await db.query(
-    `select w.*, u.uuid as user_uuid, u.email as user_email, u.nickname as user_name, u.avatar_url as user_avatar from covers as w left join users as u on w.user_email = u.email where w.status = 1 order by random() limit $1 offset $2`,
-    [limit, offset]
-  );
-
-  if (res.rowCount === 0) {
-    return [];
-  }
-
-  const covers = getCoversFromSqlResult(res);
-
-  return covers;
+  if (error) throw error;
+  return data.map(formatCover);
 }
 
 export async function getCovers(page: number, limit: number): Promise<Cover[]> {
-  if (page < 1) {
-    page = 1;
-  }
-  if (limit <= 0) {
-    limit = 50;
-  }
-  const offset = (page - 1) * limit;
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from("covers")
+    .select(
+      `
+      *,
+      users:user_email (
+        uuid,
+        email,
+        nickname,
+        avatar_url
+      )
+    `
+    )
+    .eq("status", 1)
+    .order("created_at", { ascending: false })
+    .range((page - 1) * limit, page * limit - 1);
 
-  const db = getDb();
-  const res = await db.query(
-    `select w.*, u.uuid as user_uuid, u.email as user_email, u.nickname as user_name, u.avatar_url as user_avatar from covers as w left join users as u on w.user_email = u.email where w.status = 1 order by w.created_at desc limit $1 offset $2`,
-    [limit, offset]
-  );
-  if (res.rowCount === 0) {
-    return [];
-  }
-
-  const covers = getCoversFromSqlResult(res);
-
-  return covers;
+  if (error) throw error;
+  return data.map(formatCover);
 }
 
 export async function getUserCovers(
@@ -145,126 +143,111 @@ export async function getUserCovers(
   page: number,
   limit: number
 ): Promise<Cover[]> {
-  if (page < 1) {
-    page = 1;
-  }
-  if (limit <= 0) {
-    limit = 50;
-  }
-  const offset = (page - 1) * limit;
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from("covers")
+    .select(
+      `
+      *,
+      users:user_email (
+        uuid,
+        email,
+        nickname,
+        avatar_url
+      )
+    `
+    )
+    .eq("user_email", user_email)
+    .not("img_url", "is", null)
+    .order("created_at", { ascending: false })
+    .range((page - 1) * limit, page * limit - 1);
 
-  const db = getDb();
-  const res = await db.query(
-    `select w.*, u.uuid as user_uuid, u.email as user_email, u.nickname as user_name, u.avatar_url as user_avatar from covers as w left join users as u on w.user_email = u.email where w.user_email = $1 order by w.created_at desc limit $2 offset $3`,
-    [user_email, limit, offset]
-  );
-  if (res.rowCount === 0) {
-    return [];
-  }
-
-  const covers = getCoversFromSqlResult(res);
-
-  return covers;
+  if (error) throw error;
+  return data.map(formatCover);
 }
 
 export async function getRecommendedCovers(
   page: number,
   limit: number
 ): Promise<Cover[]> {
-  if (page < 1) {
-    page = 1;
-  }
-  if (limit <= 0) {
-    limit = 50;
-  }
-  const offset = (page - 1) * limit;
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from("covers")
+    .select(
+      `
+      *,
+      users:user_email (
+        uuid,
+        email,
+        nickname,
+        avatar_url
+      )
+    `
+    )
+    .eq("is_recommended", true)
+    .eq("status", 1)
+    .order("created_at", { ascending: false })
+    .range((page - 1) * limit, page * limit - 1);
 
-  const db = getDb();
-  const res = await db.query(
-    `select w.*, u.uuid as user_uuid, u.email as user_email, u.nickname as user_name, u.avatar_url as user_avatar from covers as w left join users as u on w.user_email = u.email where w.is_recommended = true and w.status = 1 order by w.created_at desc limit $1 offset $2`,
-    [limit, offset]
-  );
-  if (res.rowCount === 0) {
-    return [];
-  }
-
-  const covers = getCoversFromSqlResult(res);
-
-  return covers;
+  if (error) throw error;
+  return data.map(formatCover);
 }
 
 export async function getAwesomeCovers(
   page: number,
   limit: number
 ): Promise<Cover[]> {
-  if (page < 1) {
-    page = 1;
-  }
-  if (limit <= 0) {
-    limit = 50;
-  }
-  const offset = (page - 1) * limit;
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from("covers")
+    .select(
+      `
+      *,
+      users:user_email (
+        uuid,
+        email,
+        nickname,
+        avatar_url
+      )
+    `
+    )
+    .eq("is_awesome", true)
+    .eq("status", 1)
+    .order("created_at", { ascending: false })
+    .range((page - 1) * limit, page * limit - 1);
 
-  const db = getDb();
-  const res = await db.query(
-    `select w.*, u.uuid as user_uuid, u.email as user_email, u.nickname as user_name, u.avatar_url as user_avatar from covers as w left join users as u on w.user_email = u.email where w.is_awesome = true and w.status = 1 order by w.created_at desc limit $1 offset $2`,
-    [limit, offset]
-  );
-  if (res.rowCount === 0) {
-    return [];
-  }
-
-  const covers = getCoversFromSqlResult(res);
-
-  return covers;
+  if (error) throw error;
+  return data.map(formatCover);
 }
 
 export async function getBrandCovers(
   page: number,
   limit: number
 ): Promise<Cover[]> {
-  if (page < 1) {
-    page = 1;
-  }
-  if (limit <= 0) {
-    limit = 50;
-  }
-  const offset = (page - 1) * limit;
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from("covers")
+    .select(
+      `
+      *,
+      users:user_email (
+        uuid,
+        email,
+        nickname,
+        avatar_url
+      )
+    `
+    )
+    .eq("is_brand", true)
+    .eq("status", 1)
+    .order("created_at", { ascending: false })
+    .range((page - 1) * limit, page * limit - 1);
 
-  const db = getDb();
-  const res = await db.query(
-    `select w.*, u.uuid as user_uuid, u.email as user_email, u.nickname as user_name, u.avatar_url as user_avatar from covers as w left join users as u on w.user_email = u.email where w.is_brand = true and w.status = 1 order by w.created_at desc limit $1 offset $2`,
-    [limit, offset]
-  );
-  if (res.rowCount === 0) {
-    return [];
-  }
-
-  const covers = getCoversFromSqlResult(res);
-
-  return covers;
+  if (error) throw error;
+  return data.map(formatCover);
 }
 
-export function getCoversFromSqlResult(
-  res: QueryResult<QueryResultRow>
-): Cover[] {
-  if (!res.rowCount || res.rowCount === 0) {
-    return [];
-  }
-
-  const covers: Cover[] = [];
-  const { rows } = res;
-  rows.forEach((row) => {
-    const cover = formatCover(row);
-    if (cover) {
-      covers.push(cover);
-    }
-  });
-
-  return covers;
-}
-
-export function formatCover(row: QueryResultRow): Cover | undefined {
+function formatCover(row: any): Cover {
   let cover: Cover = {
     id: row.id,
     user_email: row.user_email,
@@ -283,12 +266,12 @@ export function formatCover(row: QueryResultRow): Cover | undefined {
     is_brand: row.is_brand,
   };
 
-  if (row.user_name || row.user_avatar) {
+  if (row.users) {
     cover.created_user = {
-      email: row.user_email,
-      nickname: row.user_name,
-      avatar_url: row.user_avatar,
-      uuid: row.user_uuid,
+      email: row.users.email,
+      nickname: row.users.nickname,
+      avatar_url: row.users.avatar_url,
+      uuid: row.users.uuid,
     };
   }
 

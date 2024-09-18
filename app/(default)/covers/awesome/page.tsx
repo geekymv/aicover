@@ -1,6 +1,8 @@
 import Covers from "@/components/covers";
 import { getAwesomeCovers } from "@/models/cover";
 
+export const runtime = "edge";
+
 export default async function () {
   const covers = await getAwesomeCovers(1, 60);
 

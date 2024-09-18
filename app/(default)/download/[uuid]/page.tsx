@@ -3,6 +3,8 @@ import { findCoverByUuid } from "@/models/cover";
 import { getUserCredits } from "@/services/order";
 import { redirect } from "next/navigation";
 
+export const runtime = "edge";
+
 export default async function ({ params }: { params: { uuid: string } }) {
   const cover = await findCoverByUuid(params.uuid);
   if (!cover || !cover) {

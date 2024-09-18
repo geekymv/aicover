@@ -4,6 +4,8 @@ import Input from "@/components/input";
 import { Metadata } from "next";
 import { getCovers } from "@/models/cover";
 
+export const runtime = "edge";
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     alternates: {

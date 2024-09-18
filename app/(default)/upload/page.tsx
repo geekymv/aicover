@@ -1,5 +1,7 @@
 import Form from "@/components/form";
 
+export const runtime = "edge";
+
 export default function () {
   return (
     <div className="relative isolate bg-white px-6 py-8 md:py-16 lg:px-8">

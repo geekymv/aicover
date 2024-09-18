@@ -10,6 +10,8 @@ import Covers from "@/components/covers";
 import Hero from "@/components/hero";
 import Input from "@/components/input";
 
+export const runtime = "edge";
+
 export default async function ({ params }: { params: { cate: string } }) {
   const page = 1;
   const limit = 60;

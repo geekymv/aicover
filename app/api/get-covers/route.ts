@@ -3,6 +3,8 @@ import { respData, respErr } from "@/lib/resp";
 
 import { Cover } from "@/types/cover";
 
+export const runtime = "edge";
+
 export async function POST(req: Request) {
   try {
     const { page, limit } = await req.json();

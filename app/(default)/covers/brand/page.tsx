@@ -1,6 +1,8 @@
 import Covers from "@/components/covers";
 import { getBrandCovers } from "@/models/cover";
 
+export const runtime = "edge";
+
 export default async function () {
   const covers = await getBrandCovers(1, 60);
 

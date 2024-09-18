@@ -38,3 +38,6 @@ next-env.d.ts
 
 data/*data*
 data/*.sql
+
+wrangler.toml
+supabase/*

@@ -4,12 +4,15 @@ import Userinfo from "@/components/userinfo";
 import { findUserByUuid } from "@/models/user";
 import { getUserCovers } from "@/models/cover";
 
+export const runtime = "edge";
+
 export default async function ({ params }: { params: { uuid: string } }) {
   const user = await findUserByUuid(params.uuid);
   let covers: Cover[] = [];
   if (user && user.email) {
     covers = await getUserCovers(user.email, 1, 60);
   }
+  console.log("covers", covers);
 
   return (
     <div className="w-full px-6">

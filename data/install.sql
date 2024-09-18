@@ -40,3 +40,9 @@ CREATE TABLE orders (
     currency VARCHAR(50),
     user_uuid UUID
 );
+
+ALTER TABLE covers
+ADD CONSTRAINT fk_user_email
+FOREIGN KEY (user_email)
+REFERENCES users(email)
+ON DELETE CASCADE;

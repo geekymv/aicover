@@ -11,6 +11,8 @@ import { getOpenAIClient } from "@/services/openai";
 import { getUserCredits } from "@/services/order";
 import { insertCover } from "@/models/cover";
 
+export const runtime = "edge";
+
 export async function POST(req: Request) {
   const user = await currentUser();
   if (!user || !user.emailAddresses || user.emailAddresses.length === 0) {
@@ -60,27 +62,30 @@ export async function POST(req: Request) {
     console.log("generate img_url:", raw_img_url);
 
     const img_uuid = genUuid();
-    const img_name = encodeURIComponent(description);
+    // const img_name = encodeURIComponent(description);
 
     let img_url = "";
+    const img_name = `covers/${img_uuid}.png`;
+
     if (process.env.IMAGE_STORAGE === "cos") {
       const cos_img = await downloadAndUploadImageWithCos(
         raw_img_url,
         process.env.COS_BUCKET || "",
-        `covers/${img_uuid}.png`
+        img_name
       );
-      img_url = `https://${cos_img.Location}`;
+      img_url = process.env.COS_CDN_DOMAIN
+        ? `${process.env.COS_CDN_DOMAIN}/${img_name}`
+        : `${process.env.COS_CDN_DOMAIN}/${img_name}`;
       console.log("upload to cos", img_url);
     } else {
       const s3_img = await downloadAndUploadImage(
         raw_img_url,
         process.env.AWS_BUCKET || "",
-        `covers/${img_uuid}.png`
+        img_name
       );
-      img_url = s3_img.Location;
-      if (process.env.AWS_CDN_DOMAIN) {
-        img_url = `${process.env.AWS_CDN_DOMAIN}/${s3_img.Key}`;
-      }
+      img_url = process.env.AWS_CDN_DOMAIN
+        ? `${process.env.AWS_CDN_DOMAIN}/${img_name}`
+        : `${process.env.AWS_CDN_DOMAIN}/${img_name}`;
       console.log("upload to aws s3", img_url);
     }
 

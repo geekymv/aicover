@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+export const runtime = "edge";
+
 const tiers = [
   {
     name: "试用版",

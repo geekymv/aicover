@@ -10,7 +10,12 @@ export async function handleOrderSession(session_id: string) {
   try {
     const session = await stripe.checkout.sessions.retrieve(session_id);
     console.log("order session: ", session);
-    if (!session || !session.metadata || !session.metadata.order_no) {
+    if (
+      !session ||
+      !session.metadata ||
+      !session.metadata.order_no ||
+      session.payment_status !== "paid"
+    ) {
       console.log("invalid session", session_id);
       throw new Error("invalid session");
     }

@@ -7,6 +7,8 @@ import { genUuid } from "@/lib";
 import { insertCover } from "@/models/cover";
 import { uploadImage } from "@/lib/s3";
 
+export const runtime = "edge";
+
 export async function POST(req: Request) {
   const user = await currentUser();
   if (!user || !user.emailAddresses || user.emailAddresses.length === 0) {
@@ -46,12 +48,16 @@ export async function POST(req: Request) {
     const bytes = await img_file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
+    const img_name = `covers/${img_uuid}.png`;
+
     const s3_img = await uploadImage(
       buffer,
       process.env.AWS_BUCKET || "trysai",
-      `covers/${img_uuid}.png`
+      img_name
     );
-    const img_url = s3_img.Location;
+    const img_url = process.env.AWS_CDN_DOMAIN
+      ? `${process.env.AWS_CDN_DOMAIN}/${img_name}`
+      : `${process.env.AWS_CDN_DOMAIN}/${img_name}`;
 
     const cover: Cover = {
       user_email: user_email,

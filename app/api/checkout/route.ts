@@ -7,6 +7,8 @@ import { currentUser } from "@clerk/nextjs";
 import { findUserByEmail } from "@/models/user";
 import { genOrderNo } from "@/lib/order";
 
+export const runtime = "edge";
+
 export const maxDuration = 120;
 
 export async function POST(req: Request) {

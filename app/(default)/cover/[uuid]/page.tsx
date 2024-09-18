@@ -10,6 +10,8 @@ import Image from "next/image";
 import { Metadata } from "next";
 import Share from "@/components/share";
 
+export const runtime = "edge";
+
 export async function generateMetadata({
   params,
 }: {
