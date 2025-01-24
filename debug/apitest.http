@@ -1,11 +1,11 @@
-@baseUri = http://127.0.0.1:3000/api 
+@baseUri = http://127.0.0.1:8013/api 
 
 ### generate cover
 POST {{baseUri}}/gen-cover
 Content-Type: application/json
 
 {
-    "description": "a red car named Tesla"
+    "description": "celebrate the new year with my family"
 }
 
 ### get covers

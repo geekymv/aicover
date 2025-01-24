@@ -56,7 +56,7 @@ export async function getUserCredits(user_email: string): Promise<UserCredits> {
     }
 
     user_credits.left_credits = user_credits.total_credits - used_credits;
-    if (user_credits.left_credits < 0) {
+    if (user_credits.left_credits <= 0) {
       user_credits.left_credits = 0;
     }
 

@@ -36,10 +36,11 @@ export async function getUserCoversCount(user_email: string): Promise<number> {
   const { count, error } = await supabase
     .from("covers")
     .select("*", { count: "exact", head: true })
-    .eq("user_email", user_email)
-    .is("is_uploaded", false);
+    .eq("user_email", user_email);
+  // .is("is_uploaded", false);
 
-  if (error) throw error;
+  if (error) return 0;
+
   return count || 0;
 }
 

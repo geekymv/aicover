@@ -1,5 +1,7 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
+import { Upload } from "@aws-sdk/lib-storage";
+
 const s3 = new S3Client({
   region: "auto",
   endpoint: process.env.AWS_ENDPOINT,
@@ -64,6 +66,39 @@ export async function downloadAndUploadImage(
     return s3.send(new PutObjectCommand(uploadParams));
   } catch (e) {
     console.log("upload failed:", e);
+    throw e;
+  }
+}
+
+export async function uploadAudio(
+  audioBuffer: Buffer,
+  bucketName: string,
+  s3Key: string,
+  contentType: string,
+  onProgress?: (progress: number) => void
+) {
+  try {
+    const upload = new Upload({
+      client: s3,
+      params: {
+        Bucket: bucketName,
+        Key: s3Key,
+        Body: audioBuffer,
+        ContentType: contentType,
+      },
+    });
+
+    upload.on("httpUploadProgress", (progress) => {
+      if (onProgress) {
+        const percentage =
+          ((progress.loaded || 0) / (progress.total || 1)) * 100;
+        onProgress(percentage);
+      }
+    });
+
+    return await upload.done();
+  } catch (e) {
+    console.log("Audio upload failed:", e);
     throw e;
   }
 }
