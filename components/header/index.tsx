@@ -4,12 +4,16 @@ import { Nav } from "@/types/nav";
 import Social from "@/components/social";
 import User from "@/components/user";
 import { useContext } from "react";
+import { usePathname } from 'next/navigation';
 
 export default function () {
   const { user } = useContext(AppContext);
+  const pathname = usePathname();
 
   const navigations: Nav[] = [
+    { name: "index", title: "首页", url: "/", target: "_self" },
     { name: "pricing", title: "价格", url: "/pricing", target: "_self" },
+    { name: "awesome", title: "精品", url: "/covers/awesome", target: "_self" },
     {
       name: "doc",
       title: "定制微信红包封面",
@@ -37,7 +41,7 @@ export default function () {
             <div className="hidden md:flex ml-16">
               {navigations.map((tab: Nav, idx: number) => (
                 <a
-                  className="text-md font-normal leading-6 text-gray-800 mx-4"
+                  className={`text-md font-normal leading-6 ${pathname === tab.url ? 'text-primary' : 'text-gray-800'}  mx-4`}
                   key={idx}
                   href={tab.url}
                   target={tab.target}
