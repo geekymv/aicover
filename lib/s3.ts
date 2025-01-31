@@ -8,7 +8,9 @@ AWS.config.update({
   secretAccessKey: process.env.AWS_SK,
 });
 
-const s3 = new AWS.S3();
+const s3 = new AWS.S3({
+  endpoint: process.env.AWS_ENDPOINT
+});
 
 export async function downloadAndUploadImage(
   imageUrl: string,
@@ -21,11 +23,12 @@ export async function downloadAndUploadImage(
       url: imageUrl,
       responseType: "stream",
     });
-
+    const contentType = response.headers['content-type'];
     const uploadParams = {
       Bucket: bucketName,
       Key: s3Key,
       Body: response.data as Readable,
+      ContentType: contentType
     };
 
     return s3.upload(uploadParams).promise();
