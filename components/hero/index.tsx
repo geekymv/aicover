@@ -5,7 +5,7 @@ export default function () {
         新年快乐，蛇年大吉🐍
       </h1>
       <h2 className="text-4xl my-8 text-secondary-foreground">
-        使用 AI 技术生成精美的微信红包封面
+        使用 AI 技术生成精美的红包封面
       </h2>
     </section>
   );

@@ -13,7 +13,7 @@ export default function () {
   const navigations: Nav[] = [
     { name: "index", title: "首页", url: "/", target: "_self" },
     { name: "pricing", title: "价格", url: "/pricing", target: "_self" },
-    { name: "awesome", title: "精品", url: "/covers/awesome", target: "_self" },
+    // { name: "awesome", title: "精品", url: "/covers/awesome", target: "_self" },
     {
       name: "doc",
       title: "定制微信红包封面",
