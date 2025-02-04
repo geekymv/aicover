@@ -18,56 +18,21 @@ export default function () {
             <div className="my-5 mr-8 flex max-w-[200px] grow basis-[100px] flex-col space-y-5 lg:mx-10 lg:mt-0">
               <p className="font-inter font-medium text-black">其他作品</p>
               <a
-                href="https://gpts.works?utm_source=aicover.design"
+                href="https://npe4j.com"
                 target="_blank"
                 className="font-inter font-light text-gray-500"
               >
-                GPTs Works
-              </a>
-              <a
-                href="https://thinkany.ai?utm_source=aicover.design"
-                target="_blank"
-                className="font-inter font-light text-gray-500"
-              >
-                ThinkAny AI Search
-              </a>
-              <a
-                href="https://heybeauty.ai?utm_source=aicover.design"
-                target="_blank"
-                className="font-inter font-light text-gray-500"
-              >
-                HeyBeauty AI Try-On
-              </a>
-              <a
-                href="https://pagen.so?utm_source=aicover.design"
-                target="_blank"
-                className="font-inter font-light text-gray-500"
-              >
-                Pagen AI
+                npe4j.com
               </a>
             </div>
             <div className="my-5 mr-8 flex max-w-[200px] grow basis-[100px] flex-col space-y-5 lg:mx-10 lg:mt-0">
               <p className="font-inter font-medium text-black">友情链接</p>
               <a
-                href="https://idoubi.cc/about/"
+                href="https://space.bilibili.com/283633806"
                 target="_blank"
                 className="font-inter font-light text-gray-500"
               >
-                艾逗笔
-              </a>
-              <a
-                href="https://mp.weixin.qq.com/s/4duIpeZkmqlKPa4jrcUdIA"
-                target="_blank"
-                className="font-inter font-light text-gray-500"
-              >
-                全栈开发课
-              </a>
-              <a
-                href="https://mp.weixin.qq.com/s/4AIX8tGxRENukXf1srnRBA"
-                target="_blank"
-                className="font-inter font-light text-gray-500"
-              >
-                AI 红包封面开发故事
+                哔哩哔哩
               </a>
               <a
                 href="https://cover.weixin.qq.com/cgi-bin/mmcover-bin/readtemplate?t=page/index#/doc?page=design&index=-1"
@@ -80,15 +45,15 @@ export default function () {
           </div>
           <div className="mt-10 flex flex-col lg:mt-0">
             <div className="mb-4 flex flex-col items-center">
-              <p className="font-inter font-medium text-black"></p>
+              <p className="font-inter font-medium text-black">联系作者</p>
               <p className="font-inter ml-4 text-black">
                 <img
                   src={
-                    "https://zknown-1251007641.cos.ap-guangzhou.myqcloud.com/images/20240130090120.png"
+                    "https://oss.npe4j.com/image/qrcode_for_gh_981007824a8f_1280.jpg"
                   }
                   alt="qrcode"
-                  width={"250"}
-                  height={"400"}
+                  width={"180"}
+                  height={"300"}
                 />
               </p>
             </div>
@@ -97,13 +62,13 @@ export default function () {
         <div className="mx-auto my-12 w-full border border-[#E4E4E7] lg:my-20"></div>
         <div>
           <p className="font-inter text-center text-sm text-gray-500 lg:mt-0">
-            © Copyright 2024.{" "}
+            © Copyright 2025.{" "}
             <a
-              href="https://aicover.design"
+              href="https://aicover.npe4j.com"
               target="_blank"
               className="text-primary hidden md:inline-block"
             >
-              aicover.design
+              aicover.npe4j.com
             </a>{" "}
             All rights reserved.
           </p>
