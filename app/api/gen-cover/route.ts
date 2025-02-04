@@ -13,6 +13,7 @@ import { getOpenAIClient } from "@/services/openai";
 import { getUserCredits } from "@/services/order";
 import { insertCover } from "@/models/cover";
 import { replicate } from "@ai-sdk/replicate";
+import { createOpenAI, openai } from "@ai-sdk/openai";
 
 export const runtime = "edge";
 
@@ -40,7 +41,8 @@ export async function POST(req: Request) {
     }
 
     // const cover = await genCoverWithOpenAI(description, user);
-    const cover = await genCoverWithReplicate(description, user_info);
+    // const cover = await genCoverWithReplicate(description, user_info);
+    const cover = await genCoverWithTogether(description, user_info);
 
     await insertCover(cover);
 
@@ -49,6 +51,67 @@ export async function POST(req: Request) {
     console.log("gen cover failed: ", e);
     return respErr("gen cover failed");
   }
+}
+
+async function genCoverWithTogether(description: string, user: User) {
+  const prompt = `Generate a brand story image about ${description}`;
+  const created_at = new Date().toISOString();
+  const together = createOpenAI({
+    apiKey: process.env.TOGETHER_API_KEY ?? "",
+    baseURL: "https://api.together.xyz/v1",
+  });
+  const model = "black-forest-labs/FLUX.1-schnell-Free";
+  const params = {
+    model: together.imageModel(model),
+    prompt: prompt,
+    size: "1024 x 1760"  as `${number}x${number}`,
+    n: 1,
+    providerOptions: {
+      "openai": {
+        "width": 1024,
+        "height": 1760,
+        // "response_format": "url",
+      }
+    }
+  }
+  const {images, warnings} = await generateImage(params)
+  if (!images || images.length === 0 || warnings.length > 0) {
+    throw new Error("generate cover failed");
+  }
+
+  const img_uuid = genUuid();
+  const img_name = `covers/${img_uuid}.png`;
+
+  try {
+    // Convert uint8Array to Buffer and upload
+    const buffer = Buffer.from(images[0].base64, "base64");
+    await uploadImage(buffer, process.env.AWS_BUCKET || "", img_name);
+
+    const img_url = process.env.AWS_CDN_DOMAIN
+      ? `${process.env.AWS_CDN_DOMAIN}/${img_name}`
+      : `${process.env.AWS_BUCKET_DOMAIN}/${img_name}`; // Fallback to bucket domain if CDN not available
+
+    const img_size = "1024x1792";
+
+    const cover: Cover = {
+      user_email: user.email,
+      img_description: description,
+      img_size: img_size,
+      img_url: img_url,
+      llm_name: model,
+      llm_params: JSON.stringify(params),
+      created_at: created_at,
+      uuid: img_uuid,
+      status: 1,
+      user_uuid: user.uuid,
+    };
+
+    return cover;
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw new Error("Failed to upload generated image");
+  }
+
 }
 
 async function genCoverWithReplicate(description: string, user: User) {

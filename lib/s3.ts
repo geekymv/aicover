@@ -14,13 +14,15 @@ const s3 = new S3Client({
 export async function uploadImage(
   imageBuffer: Buffer,
   bucketName: string,
-  s3Key: string
+  s3Key: string,
+  contentType: string = "image/png"
 ) {
   try {
     const uploadParams = {
       Bucket: bucketName,
       Key: s3Key,
       Body: imageBuffer,
+      ContentType: contentType
     };
 
     return s3.send(new PutObjectCommand(uploadParams));

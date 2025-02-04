@@ -19,11 +19,12 @@ export default function ({ cover }: { cover: Cover }) {
     if (!user) {
       return;
     }
+    /*
     if (!user.credits || user.credits.left_credits <= 0) {
       toast.error("余额不足，请先充值");
       return;
     }
-
+    */
     e.preventDefault();
     try {
       const response = await fetch(cover.img_url);
