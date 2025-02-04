@@ -9,7 +9,7 @@ import { genOrderNo } from "@/lib/order";
 
 export const runtime = "edge";
 
-export const maxDuration = 120;
+export const maxDuration = 60;
 
 export async function POST(req: Request) {
   const user = await currentUser();
