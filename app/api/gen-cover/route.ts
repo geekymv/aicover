@@ -35,10 +35,12 @@ export async function POST(req: Request) {
       return respErr("no auth");
     }
 
+    /*
     const user_credits = await getUserCredits(user_info.email);
     if (!user_credits || user_credits.left_credits < 1) {
       return respErr("credits not enough");
     }
+    */
 
     // const cover = await genCoverWithOpenAI(description, user);
     // const cover = await genCoverWithReplicate(description, user_info);
@@ -54,7 +56,7 @@ export async function POST(req: Request) {
 }
 
 async function genCoverWithTogether(description: string, user: User) {
-  const prompt = `Generate a brand story image about ${description}`;
+  const prompt = `generate a black-and-white line art coloring page about ${description}. The design should be simple and cartoonish, suitable for children. Ensure the artwork is simple clean and high-contrast, with no shading or color.`;
   const created_at = new Date().toISOString();
   const together = createOpenAI({
     apiKey: process.env.TOGETHER_API_KEY ?? "",
@@ -64,12 +66,12 @@ async function genCoverWithTogether(description: string, user: User) {
   const params = {
     model: together.imageModel(model),
     prompt: prompt,
-    size: "1024 x 1760"  as `${number}x${number}`,
+    size: "1024 x 1024"  as `${number}x${number}`,
     n: 1,
     providerOptions: {
       "openai": {
         "width": 1024,
-        "height": 1760,
+        "height": 1024,
         // "response_format": "url",
       }
     }
@@ -91,7 +93,7 @@ async function genCoverWithTogether(description: string, user: User) {
       ? `${process.env.AWS_CDN_DOMAIN}/${img_name}`
       : `${process.env.AWS_BUCKET_DOMAIN}/${img_name}`; // Fallback to bucket domain if CDN not available
 
-    const img_size = "1024x1792";
+    const img_size = "1024x1024";
 
     const cover: Cover = {
       user_email: user.email,

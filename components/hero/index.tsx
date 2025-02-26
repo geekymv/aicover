@@ -7,11 +7,10 @@ export default async function () {
   return (
     <section className="max-w-3xl mx-auto text-center">
       <h1 className="text-3xl md:text-6xl font-bold text-primary mt-8 md:mt-24">
-        新年快乐，蛇年大吉🐍
+        AI Coloring Page Generator
       </h1>
       <h2 className="text-2xl md:text-4xl my-8 text-secondary-foreground">
-        <span className="text-primary">{covers_count}</span> 张使用 AI
-        生成的红包封面
+        Create high-quality coloring pages for free.
       </h2>
       {/* <Producthunt /> */}
     </section>

@@ -26,22 +26,23 @@ export default function () {
   const handleSubmit = async () => {
     console.log("description", description);
     if (!description) {
-      toast.error("请输入红包封面描述");
+      toast.error("Please enter a prompt");
       inputRef.current?.focus();
       return;
     }
 
     if (!user) {
-      toast.error("请先登录");
+      toast.error("Please login");
       router.push("/sign-in");
       return;
     }
-
+    /*
     if (user.credits && user.credits.left_credits < 1) {
       toast.error("余额不足，请先充值");
       router.push("/pricing");
       return;
     }
+    */
 
     try {
       const params = {
@@ -60,7 +61,7 @@ export default function () {
       setLoading(false);
 
       if (resp.status === 401) {
-        toast.error("请先登录");
+        toast.error("Please login");
         router.push("/sign-in");
         return;
       }
@@ -74,11 +75,12 @@ export default function () {
       fetchUserInfo();
       setDiscription("");
 
-      toast.success("生成成功");
+      toast.success("Success!");
       if (data) {
         console.log("new cover", data);
         // setCovers((covers: Cover[]) => [data, ...covers]);
-        router.push(`/cover/${data.uuid}`);
+        // router.push(`/cover/${data.uuid}`);
+        router.refresh();
       }
     } catch (e) {
       console.log("gen cover failed", e);
@@ -88,7 +90,7 @@ export default function () {
   useEffect(() => {
     if (description) {
       if (!user) {
-        toast.error("请先登录");
+        toast.error("Please login");
         router.push("/sign-in");
         return;
       }
@@ -100,7 +102,7 @@ export default function () {
       <input
         type="text"
         className="mb-1 h-9 w-full rounded-md border border-solid border-primary px-3 py-6 text-sm text-[#333333] focus:border-primary"
-        placeholder="输入要生成的红包封面描述"
+        placeholder="Enter your prompt"
         ref={inputRef}
         value={description}
         onChange={(e) => setDiscription(e.target.value)}
@@ -111,14 +113,14 @@ export default function () {
           className="relative right-0 top-[5px] w-full cursor-pointer rounded-md bg-primary px-6 py-2 text-center font-semibold text-white sm:absolute sm:right-[5px] sm:w-auto"
           disabled
         >
-          生成中...
+          Generating...
         </button>
       ) : (
         <button
           className="relative right-0 top-[5px] w-full cursor-pointer rounded-md bg-primary border-primary px-6 py-2 text-center font-semibold text-white sm:absolute sm:right-[5px] sm:w-auto"
           onClick={handleSubmit}
         >
-          生成封面
+          Generate
         </button>
       )}
     </div>

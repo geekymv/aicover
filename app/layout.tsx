@@ -11,12 +11,12 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    template: "%s by AI 红包封面生成器 ｜ AI Cover",
-    default: "AI 红包封面生成器 ｜ AI Cover",
+    template: "%s by AI Coloring Page Generator ｜ Free Download",
+    default: "AI Coloring Page Generator ｜ Coloring Page",
   },
   description:
-    "AI 红包封面生成器，利用 AI 技术生成高清精美的微信红包封面图片。",
-  keywords: "AI 红包封面生成器, 微信红包封面, 微信红包, AI 红包封面, AI Cover",
+    "100% Free AI Coloring Page Generator Online",
+  keywords: "AI Coloring Page Generator, AI Coloring Page, High Quality Images, AI Coloring Page Online, Coloring Page",
 };
 
 export default function RootLayout({

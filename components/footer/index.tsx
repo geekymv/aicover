@@ -6,9 +6,9 @@ export default function () {
       <div className="w-screen flex-col px-6 py-20 lg:flex lg:px-10 xl:px-24">
         <div className="lg:flex lg:flex-row lg:justify-between">
           <div>
-            <p>AI Cover</p>
+            <p>AI Coloring Page Generator</p>
             <p className="font-inter mt-4 max-w-[350px] text-base font-light text-gray-500">
-              AI 红包封面生成器
+              AI Coloring Page Generator
             </p>
             <div className="mb-8 mt-6">
               <Social />
@@ -16,7 +16,7 @@ export default function () {
           </div>
           <div className="flex grow flex-row flex-wrap lg:mx-10 lg:flex-nowrap lg:justify-center">
             <div className="my-5 mr-8 flex max-w-[200px] grow basis-[100px] flex-col space-y-5 lg:mx-10 lg:mt-0">
-              <p className="font-inter font-medium text-black">其他作品</p>
+              <p className="font-inter font-medium text-black">Other Product</p>
               <a
                 href="https://npe4j.com"
                 target="_blank"
@@ -26,26 +26,19 @@ export default function () {
               </a>
             </div>
             <div className="my-5 mr-8 flex max-w-[200px] grow basis-[100px] flex-col space-y-5 lg:mx-10 lg:mt-0">
-              <p className="font-inter font-medium text-black">友情链接</p>
+              <p className="font-inter font-medium text-black">Links</p>
               <a
                 href="https://space.bilibili.com/283633806"
                 target="_blank"
                 className="font-inter font-light text-gray-500"
               >
-                哔哩哔哩
-              </a>
-              <a
-                href="https://cover.weixin.qq.com/cgi-bin/mmcover-bin/readtemplate?t=page/index#/doc?page=design&index=-1"
-                target="_blank"
-                className="font-inter font-light text-gray-500"
-              >
-                微信红包封面制作教程
+                bilibili
               </a>
             </div>
           </div>
           <div className="mt-10 flex flex-col lg:mt-0">
             <div className="mb-4 flex flex-col items-center">
-              <p className="font-inter font-medium text-black">联系作者</p>
+              <p className="font-inter font-medium text-black">Contact author</p>
               <p className="font-inter ml-4 text-black">
                 <img
                   src={

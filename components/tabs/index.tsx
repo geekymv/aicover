@@ -4,9 +4,9 @@ function classNames(...classes: string[]) {
 
 export default function ({ cate }: { cate: string }) {
   const tabs = [
-    { name: "最新", href: "/", current: cate === "" || cate === "latest" },
-    { name: "最热", href: "/covers/featured", current: cate === "featured" },
-    { name: "随机", href: "/covers/random", current: cate === "random" },
+    { name: "Latest", href: "/", current: cate === "" || cate === "latest" },
+    { name: "Hottest", href: "/covers/featured", current: cate === "featured" },
+    { name: "Random", href: "/covers/random", current: cate === "random" },
   ];
 
   return (

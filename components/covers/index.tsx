@@ -21,7 +21,7 @@ export default async function ({
           </div>
         )}
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 md:grid-cols-3 lg:gap-12">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
           {false ? (
             <div className="text-center mx-auto">loading...</div>
           ) : (
@@ -32,20 +32,14 @@ export default async function ({
                     <a
                       href={`/cover/${cover.uuid}`}
                       key={idx}
-                      className="relative overflow-hidden max-w-[280px] mx-auto cursor-pointer"
+                      className="relative overflow-hidden cursor-pointer"
                     >
                       <Image
                         src={cover.img_url}
-                        alt={cover.img_description}
+                        alt={`${cover.img_description} coloring page`}
                         width="280"
-                        height="420"
-                        className="w-full rounded-lg"
-                      />
-
-                      <img
-                        src="/hb_bottom.png"
-                        className="absolute bottom-0"
-                        alt=""
+                        height="280"
+                        className="w-full h-[300px] object-cover rounded-lg"
                       />
                     </a>
                   );

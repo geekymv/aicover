@@ -12,28 +12,28 @@ export default function () {
   const navigations: Nav[] = [
     {
       name: "home",
-      title: "首页",
+      title: "Home",
       url: "/",
       target: "_self",
       active: pathname === "/",
     },
     {
       name: "pricing",
-      title: "价格",
+      title: "Pricing",
       url: "/pricing",
       target: "_self",
       active: pathname === "/pricing",
     },
     {
       name: "awesome",
-      title: "精品",
+      title: "Awesome",
       url: "/covers/awesome",
       target: "_self",
       active: pathname === "/covers/awesome",
     },
     {
       name: "brand",
-      title: "品牌案例",
+      title: "Brand",
       url: "/covers/brand",
       target: "_self",
       active: pathname === "/covers/brand",
@@ -46,13 +46,13 @@ export default function () {
         <nav className="font-inter mx-auto h-auto w-full max-w-[1600px] lg:relative lg:top-0">
           <div className="flex flex-row items-center px-6 py-8 lg:flex-row lg:items-center lg:justify-between lg:px-10 lg:py-8 xl:px-20">
             <a href="/" className="text-xl font-medium flex items-center">
-              <img
+              {/* <img
                 src="/logo.png"
                 className="w-8 h-8 rounded-full mr-2"
                 alt="logo"
-              />
+              /> */}
               <span className="font-bold text-primary text-2xl">
-                AI 红包封面
+                AI Coloring Page
               </span>
             </a>
 
@@ -100,7 +100,7 @@ export default function () {
                     </>
                   ) : (
                     <a className="cursor-pointer" href="/sign-in">
-                      <Button>登录</Button>
+                      <Button className="text-white">Login</Button>
                     </a>
                   )}
                 </>
