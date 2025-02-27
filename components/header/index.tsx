@@ -84,18 +84,6 @@ export default function () {
                 <>
                   {user ? (
                     <>
-                      {user.credits && (
-                        <a
-                          href="/pricing"
-                          className="hidden md:block mr-8 font-normal text-gray-800 cursor-pointer"
-                        >
-                          额度:{" "}
-                          <span className="text-primary">
-                            {user.credits.left_credits}
-                          </span>
-                        </a>
-                      )}
-
                       <User user={user} />
                     </>
                   ) : (

@@ -62,16 +62,10 @@ export default async function ({ params }: { params: { uuid: string } }) {
                     >
                       <Image
                         src={cover.img_url}
-                        alt={cover.img_description}
+                        alt={`${cover.img_description} coloring page`}
                         width="280"
                         height="420"
                         className="w-full rounded-lg"
-                      />
-
-                      <img
-                        src="/hb_bottom.png"
-                        className="absolute bottom-0"
-                        alt=""
                       />
                     </a>
 
@@ -121,52 +115,13 @@ export default async function ({ params }: { params: { uuid: string } }) {
                           shareUrl={`${process.env.WEB_BASE_URI}/cover/${cover.uuid}`}
                         />
                       </div>
-
-                      {cover.is_awesome ? (
-                        <p className="text-slate-500 text-sm py-8">
-                          添加客服微信，截图告知客服你想要购买的红包封面图片，付款成功后，客服给你发送图片源文件，上传图片到微信红包封面开放平台
-                          <a
-                            href="https://cover.weixin.qq.com/cgi-bin/mmcover-bin/readtemplate?t=page/index#/make"
-                            target="_blank"
-                            className="text-primary"
-                          >
-                            定制你的红包封面👉
-                          </a>
-                        </p>
-                      ) : cover.is_brand ? (
-                        <p className="text-slate-500 text-sm py-8">
-                          添加客服微信，描述你的需求，我们安排专业的设计师给你定制品牌红包封面。
-                        </p>
-                      ) : (
-                        <p className="text-slate-500 text-sm py-8">
-                          此处下载的封面图片，不能直接用于微信发红包。你可以上传到微信红包封面开放平台，
-                          <a
-                            href="https://cover.weixin.qq.com/cgi-bin/mmcover-bin/readtemplate?t=page/index#/make"
-                            target="_blank"
-                            className="text-primary"
-                          >
-                            定制你的红包封面👉
-                          </a>
-                          <br />
-                          <br />
-                          微信红包封面图片要求在 500k
-                          以内，如果下载的图片过大，请自行
-                          <a
-                            href="https://tinypng.com/"
-                            target="_blank"
-                            className="text-primary"
-                          >
-                            压缩图片👉
-                          </a>
-                        </p>
-                      )}
                     </div>
                   </div>
                 </div>
               </section>
 
               <h2 className="text-xl font-semibold capitalize mt-8 md:text-3xl md:my-4">
-                更多封面
+                More Coloring Pages
               </h2>
 
               <div className="mb-8 grid w-full grid-cols-1 md:mb-12 md:grid-cols-1 md:gap-4 lg:mb-16">

@@ -13,7 +13,7 @@ export default function ({ cover }: { cover: Cover }) {
 
   const handleDownload = async (e: any) => {
     if (user === null) {
-      toast.error("请先登录");
+      toast.error("Please login");
       return;
     }
     if (!user) {
@@ -39,15 +39,15 @@ export default function ({ cover }: { cover: Cover }) {
       window.URL.revokeObjectURL(downloadUrl);
     } catch (error) {
       console.error("download img_url failed:", error);
-      toast.error("下载出错");
+      toast.error("download failed");
     }
   };
 
   return (
     <a onClick={handleDownload}>
-      <Button className="mt-4 mx-auto">
+      <Button className="mt-4 mx-auto text-white">
         <FaDownload className="mr-2" />
-        下载封面图片
+        Download
       </Button>
     </a>
   );
