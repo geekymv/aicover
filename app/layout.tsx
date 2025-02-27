@@ -31,7 +31,7 @@ export default function RootLayout({
           <link rel="icon" href="/favicon.ico" />
           <script
             async
-            src="https://www.googletagmanager.com/gtag/js?id=G-L50J0T914F"
+            src="https://www.googletagmanager.com/gtag/js?id=G-9BG8F9XES7"
           ></script>
           <script
             dangerouslySetInnerHTML={{
@@ -40,7 +40,7 @@ export default function RootLayout({
                       function gtag(){dataLayer.push(arguments);}
                       gtag('js', new Date());
                     
-                      gtag('config', 'G-L50J0T914F');
+                      gtag('config', 'G-9BG8F9XES7');
                       `,
             }}
           ></script>
