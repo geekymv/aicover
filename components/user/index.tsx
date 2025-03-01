@@ -48,7 +48,7 @@ export default function ({ user }: Props) {
         <DropdownMenuSeparator className="md:hidden" />
 
         <DropdownMenuCheckboxItem className="text-center truncate">
-          <a href={`/user/${user.uuid}/coloring-pages`}>My Coloring Pages</a>
+          <a href={`/user/${user.uuid}/covers`}>My Coloring Pages</a>
         </DropdownMenuCheckboxItem>
         <DropdownMenuSeparator />
 
