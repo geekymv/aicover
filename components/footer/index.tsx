@@ -57,11 +57,11 @@ export default function () {
           <p className="font-inter text-center text-sm text-gray-500 lg:mt-0">
             © Copyright 2025.{" "}
             <a
-              href="https://aicover.npe4j.com"
+              href="https://funny-coloring-pages.online"
               target="_blank"
               className="text-primary hidden md:inline-block"
             >
-              aicover.npe4j.com
+              funny-coloring-pages.online
             </a>{" "}
             All rights reserved.
           </p>
