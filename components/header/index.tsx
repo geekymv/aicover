@@ -39,7 +39,7 @@ export default function () {
                 alt="logo"
               /> */}
               <span className="font-bold text-primary text-2xl">
-                AI Coloring Page
+                Funny Coloring Page
               </span>
             </a>
 

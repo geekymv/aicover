@@ -12,11 +12,11 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: {
     template: "%s by AI Coloring Page Generator ｜ Free Download",
-    default: "AI Coloring Page Generator ｜ Coloring Page",
+    default: " Funny Coloring Page｜ AI Coloring Page Generator",
   },
   description:
     "100% Free AI Coloring Page Generator Online",
-  keywords: "AI Coloring Page Generator, AI Coloring Page, High Quality Images, AI Coloring Page Online, Coloring Page",
+  keywords: "Funny Coloring Page Generator, Coloring Page Generator, AI Coloring Page Online, Coloring Page",
 };
 
 export default function RootLayout({

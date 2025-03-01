@@ -48,28 +48,13 @@ export default function ({ user }: Props) {
         <DropdownMenuSeparator className="md:hidden" />
 
         <DropdownMenuCheckboxItem className="text-center truncate">
-          <a href={`/user/${user.uuid}/covers`}>我的封面</a>
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuSeparator />
-
-        <DropdownMenuCheckboxItem className="text-center truncate">
-          <a href="/upload">上传封面</a>
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuSeparator />
-
-        <DropdownMenuCheckboxItem className="text-center truncate">
-          <a href={`/covers/awesome`}>精品专区</a>
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuSeparator />
-
-        <DropdownMenuCheckboxItem className="text-center truncate">
-          <a href={`/covers/brand`}>品牌案例</a>
+          <a href={`/user/${user.uuid}/coloring-pages`}>My Coloring Pages</a>
         </DropdownMenuCheckboxItem>
         <DropdownMenuSeparator />
 
         <DropdownMenuCheckboxItem>
           <SignOutButton signOutCallback={() => location.reload()}>
-            退出登录
+            Logout
           </SignOutButton>
         </DropdownMenuCheckboxItem>
       </DropdownMenuContent>

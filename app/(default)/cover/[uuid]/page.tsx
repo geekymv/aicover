@@ -27,8 +27,8 @@ export async function generateMetadata({
   }
 
   return {
-    title: `AI 红包封面预览 - `,
-    description: `${description}, by AI 红包封面生成器 ｜ AI Cover`,
+    title: `Funny Coloring Page - `,
+    description: `${description}, by AI Coloring Page Generator ｜ Funny Coloring Page`,
     alternates: {
       canonical: `${process.env.WEB_BASE_URI}/cover/${params.uuid}`,
     },
