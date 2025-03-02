@@ -7,6 +7,8 @@ export default authMiddleware({
     "/pricing",
     "/covers/awesome",
     "/covers/brand",
+    "/covers/featured",
+    "/covers/random",
     "/api/get-covers",
     "/api/get-user-info",
   ],
