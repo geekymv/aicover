@@ -1,4 +1,5 @@
 import Social from "@/components/social";
+import Link from "next/link";
 
 export default function () {
   return (
@@ -24,9 +25,6 @@ export default function () {
               >
                 npe4j.com
               </a>
-            </div>
-            <div className="my-5 mr-8 flex max-w-[200px] grow basis-[100px] flex-col space-y-5 lg:mx-10 lg:mt-0">
-              <p className="font-inter font-medium text-black">Links</p>
               <a
                 href="https://space.bilibili.com/283633806"
                 target="_blank"
@@ -34,6 +32,15 @@ export default function () {
               >
                 bilibili
               </a>
+            </div>
+            <div className="my-5 mr-8 flex max-w-[200px] grow basis-[100px] flex-col space-y-5 lg:mx-10 lg:mt-0">
+              <p className="font-inter font-medium text-black">Legal</p>
+              <Link href="/privacy-policy" className="font-inter font-light text-gray-500 hover:text-gray-700">
+                Privacy Policy
+              </Link>
+              <Link href="/terms-of-service" className="font-inter font-light text-gray-500 hover:text-gray-700">
+                Terms of Service
+              </Link>
             </div>
           </div>
           <div className="mt-10 flex flex-col lg:mt-0">
@@ -55,7 +62,7 @@ export default function () {
         <div className="mx-auto my-12 w-full border border-[#E4E4E7] lg:my-20"></div>
         <div>
           <p className="font-inter text-center text-sm text-gray-500 lg:mt-0">
-            © Copyright 2025.{" "}
+            © Copyright {new Date().getFullYear()}.{" "}
             <a
               href="https://funny-coloring-pages.online"
               target="_blank"
