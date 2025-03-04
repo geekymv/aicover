@@ -15,7 +15,6 @@ export default function PrivacyPolicy() {
         <p className="text-gray-600 mb-4">When you use our coloring page generator, we collect the following information:</p>
         <ul className="list-disc pl-6 mb-6 space-y-2 text-gray-600">
           <li><strong className="text-gray-700">Keywords or prompts</strong> you enter to generate coloring pages.</li>
-          <li><strong className="text-gray-700">IP address</strong> for usage limiting, security, and abuse prevention.</li>
           <li><strong className="text-gray-700">Usage data</strong>, including the number of pages generated and viewed.</li>
         </ul>
 
@@ -40,7 +39,6 @@ export default function PrivacyPolicy() {
         <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4 pb-2 border-b border-gray-200">3. Data Storage</h2>
         <ul className="list-disc pl-6 mb-6 space-y-2 text-gray-600">
           <li><strong className="text-gray-700">Generated coloring pages</strong> are stored on <strong className="text-gray-700">Cloudflare R2</strong> for public access.</li>
-          <li><strong className="text-gray-700">User data</strong>, such as IP addresses and usage information, is stored in our secure database.</li>
           <li>We retain your information only for as long as necessary to provide our services and comply with legal obligations.</li>
         </ul>
 
