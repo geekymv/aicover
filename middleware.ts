@@ -4,6 +4,8 @@ import { authMiddleware } from "@clerk/nextjs";
 export default authMiddleware({
   publicRoutes: [
     "/",
+    "/privacy-policy",
+    "/terms-of-service",
     "/pricing",
     "/covers/awesome",
     "/covers/brand",
