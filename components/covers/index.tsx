@@ -34,7 +34,7 @@ export default async function ({
                       key={idx}
                       className="relative overflow-hidden cursor-pointer"
                     >
-                      <Image
+                      <img
                         src={cover.img_url}
                         alt={`${cover.img_description} coloring page`}
                         width="280"

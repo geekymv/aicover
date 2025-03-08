@@ -60,7 +60,7 @@ export default async function ({ params }: { params: { uuid: string } }) {
                       href={`/cover/${cover.uuid}`}
                       className="relative overflow-hidden max-w-[280px] mx-auto cursor-pointer"
                     >
-                      <Image
+                      <img
                         src={cover.img_url}
                         alt={`${cover.img_description} coloring page`}
                         width="280"
