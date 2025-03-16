@@ -56,7 +56,7 @@ export default async function ({ params }: { params: { uuid: string } }) {
             <ol className="flex text-sm text-gray-500">
               <li><a href="/" className="hover:text-gray-700">Home</a></li>
               <li className="mx-2">/</li>
-              <li><a href="/coloring-pages" className="hover:text-gray-700">Coloring Pages</a></li>
+              <li>Coloring Pages</li>
               <li className="mx-2">/</li>
               <li className="text-gray-900 font-medium truncate max-w-[200px]">{cover.img_description}</li>
             </ol>
