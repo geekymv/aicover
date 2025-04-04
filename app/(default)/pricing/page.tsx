@@ -22,7 +22,7 @@ const tiers = [
     credits: 5,
     description: "Start creating for free",
     features: [
-      "5 coloring pages per day",
+      "1 coloring pages",
       "Basic templates access",
       "Standard quality",
       "PNG download format",
