@@ -10,14 +10,14 @@ export default async function () {
         Funny Coloring Pages Generator With AI
       </h1>
       <h2 className="text-2xl md:text-4xl my-8 text-secondary-foreground">
-        Create high-quality coloring pages for free with Funny Coloring Page Generator
+        Create high-quality coloring pages  with Funny Coloring Page Generator
       </h2>
       <p className="text-lg text-gray-600 mb-8">
         Join {covers_count}+ users creating printable coloring pages for kids and adults
       </p>
       <div className="flex flex-wrap gap-4 justify-center items-center">
         <span className="inline-flex items-center px-4 py-2 bg-gray-100 rounded-full text-sm text-gray-600">
-          ✨ Free to Use
+          ✨ AI Powered
         </span>
         <span className="inline-flex items-center px-4 py-2 bg-gray-100 rounded-full text-sm text-gray-600">
           🎨 High Quality

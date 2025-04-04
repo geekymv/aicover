@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     default: " Funny Coloring Page｜ AI Coloring Page Generator",
   },
   description:
-    "100% Free AI Coloring Page Generator Online",
+    "Funny Coloring Page Generator Online",
   keywords: "Funny Coloring Page Generator, Coloring Page Generator, AI Coloring Page Online, Coloring Page",
 };
 

@@ -11,42 +11,63 @@ export const runtime = "edge";
 
 const tiers = [
   {
-    name: "试用版",
-    id: "try",
+    name: "Free",
+    id: "free",
     href: "#",
-    priceMonthly: "¥10.24",
-    unit: "一次性支付",
-    plan: "one-time",
-    amount: 1024,
-    currency: "cny",
-    credits: 3,
-    description: "",
+    priceMonthly: "$0",
+    unit: "forever",
+    plan: "free",
+    amount: 0,
+    currency: "usd",
+    credits: 5,
+    description: "Start creating for free",
     features: [
-      "可生成 3 个 AI 红包封面",
-      "1 个月内有效",
-      "高清的图片质量",
-      "较快的生成速度",
-      "可下载 3 个 AI 红包封面",
+      "5 coloring pages per day",
+      "Basic templates access",
+      "Standard quality",
+      "PNG download format",
+      "Community support",
+    ],
+    featured: false,
+  },
+  {
+    name: "Basic",
+    id: "basic",
+    href: "#",
+    priceMonthly: "$4.99",
+    unit: "per month",
+    plan: "monthly",
+    amount: 499,
+    currency: "usd",
+    credits: 100,
+    description: "Perfect for casual users",
+    features: [
+      "Generate 100 coloring pages per month",
+      "Access to basic templates",
+      "Standard generation speed",
+      "Download in PNG format",
+      "Basic customization options",
     ],
     featured: true,
   },
   {
-    name: "畅享版",
-    id: "one-time-payment",
+    name: "Pro",
+    id: "pro",
     href: "#",
-    priceMonthly: "¥20.24",
-    unit: "一次性支付",
-    plan: "one-time",
-    amount: 2024,
-    currency: "cny",
-    credits: 10,
-    description: "",
+    priceMonthly: "$9.99",
+    unit: "per month",
+    plan: "monthly",
+    amount: 999,
+    currency: "usd",
+    credits: 999999,
+    description: "For professional creators",
     features: [
-      "可生成 10 个 AI 红包封面",
-      "1 个月内有效",
-      "超清的图片质量",
-      "更快的生成速度",
-      "不限制 AI 红包封面下载次数",
+      "Unlimited coloring pages",
+      "Access to all premium templates",
+      "Priority generation speed",
+      "Download in multiple formats",
+      "Advanced customization options",
+      "Priority customer support",
     ],
     featured: false,
   },
@@ -128,17 +149,18 @@ export default function () {
     }
   };
 
+  // 修改渲染部分的网格布局
   return (
     <div className="relative isolate bg-white px-6 py-8 md:py-16 lg:px-8">
       <div className="mx-auto max-w-3xl text-center lg:max-w-4xl">
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-primary sm:text-6xl">
-          付费方案
+          Choose Your Plan
         </h1>
       </div>
       <h2 className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-600">
-        选择一个付费方案，支付完成后可生成 AI 红包封面
+        Select a plan that best fits your creative needs
       </h2>
-      <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-20 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-2">
+      <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-20 sm:gap-y-0 lg:max-w-6xl lg:grid-cols-3">
         {tiers.map((tier, tierIdx) => (
           <div
             key={tier.id}
@@ -195,7 +217,7 @@ export default function () {
                 );
               }}
             >
-              {loading ? "处理中..." : "购买"}
+              {loading ? "Processing..." : "Subscribe Now"}
             </Button>
           </div>
         ))}

@@ -62,7 +62,18 @@ export default function TermsOfService() {
         <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4 pb-2 border-b border-gray-200">8. Changes to Terms</h2>
         <p className="text-gray-600 mb-4">We may update these terms periodically. Continued use of the service after changes constitutes acceptance of updated terms. Major changes will be announced via service notifications.</p>
 
-        <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4 pb-2 border-b border-gray-200">9. Contact</h2>
+        {/* Add Refund Policy */}
+        <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4 pb-2 border-b border-gray-200">9. Refund Policy</h2>
+        <p className="text-gray-600 mb-4">Our refund policy is designed to be fair and transparent:</p>
+        <ul className="list-disc pl-6 mb-6 space-y-2 text-gray-600">
+          <li>Refund requests must be submitted within 7 days of purchase</li>
+          <li>Full refunds will be provided if our service experiences significant technical issues preventing usage</li>
+          <li>No refunds will be issued for content that has already been generated or downloaded</li>
+          <li>Refund requests will be processed within 3-5 business days</li>
+          <li>Refunds will be issued to the original payment method</li>
+        </ul>
+
+        <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4 pb-2 border-b border-gray-200">10. Contact</h2>
         <p className="text-gray-600 mb-4">For questions about these terms or to report violations, please contact us at:
           <a href="mailto:geekymv2024@gmail.com" className="text-blue-600 hover:text-blue-800 transition-colors">
             geekymv2024@gmail.com

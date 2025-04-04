@@ -17,13 +17,13 @@ export default function () {
       target: "_self",
       active: pathname === "/",
     },
-    // {
-    //   name: "pricing",
-    //   title: "Pricing",
-    //   url: "/pricing",
-    //   target: "_self",
-    //   active: pathname === "/pricing",
-    // },
+    {
+      name: "pricing",
+      title: "Pricing",
+      url: "/pricing",
+      target: "_self",
+      active: pathname === "/pricing",
+    },
     
   ];
 
