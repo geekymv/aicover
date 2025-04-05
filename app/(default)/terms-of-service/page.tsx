@@ -66,7 +66,7 @@ export default function TermsOfService() {
         <h2 className="text-2xl font-semibold text-gray-800 mt-8 mb-4 pb-2 border-b border-gray-200">9. Refund Policy</h2>
         <p className="text-gray-600 mb-4">Our refund policy is designed to be fair and transparent:</p>
         <ul className="list-disc pl-6 mb-6 space-y-2 text-gray-600">
-          <li>Refund requests must be submitted within 7 days of purchase</li>
+          <li>We offer a 7-day unconditional money-back guarantee for all purchases</li>
           <li>Full refunds will be provided if our service experiences significant technical issues preventing usage</li>
           <li>No refunds will be issued for content that has already been generated or downloaded</li>
           <li>Refund requests will be processed within 3-5 business days</li>
