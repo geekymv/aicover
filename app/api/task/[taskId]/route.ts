@@ -39,9 +39,11 @@ export async function GET(
         if (result.data.status === '2') {
             const imageUrls = JSON.parse(result.data.result);
             console.log('提取到的图片URL:', imageUrls);
-            const created_at = new Date().toISOString();
+            const date = new Date();
+            const created_at = date.toISOString();
             const img_uuid = genUuid();
-            const img_name = `covers/${img_uuid}.png`;
+            const today = `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}`;
+            const img_name = `covers/${today}/${img_uuid}.png`;
             downloadAndUploadImage(imageUrls[1], process.env.AWS_BUCKET || "", img_name);
             console.log('upload image success')
             const img_url = process.env.AWS_CDN_DOMAIN
