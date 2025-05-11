@@ -58,29 +58,51 @@ export default function () {
         body: JSON.stringify(params),
       });
       const { code, message, data } = await resp.json();
-      setLoading(false);
+      
 
       if (resp.status === 401) {
         toast.error("Please login");
         router.push("/sign-in");
         return;
       }
-      console.log("gen wallpaper resp", resp);
+      console.log("gen image resp", resp);
 
       if (code !== 0) {
         toast.error(message);
+        setLoading(false);
         return;
       }
 
       fetchUserInfo();
       setDiscription("");
-
-      toast.success("Success!");
+      
       if (data) {
         console.log("new cover", data);
-        // setCovers((covers: Cover[]) => [data, ...covers]);
-        // router.push(`/cover/${data.uuid}`);
-        router.refresh();
+        var taskId = data.taskId;
+        var intervalId = setInterval(async () => {
+          const resp = await fetch(`/api/task/${taskId}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const { code, message, data } = await resp.json();
+          if (code!== 0) {
+            toast.error(message);
+            return;
+          }
+          if (data.status === "2") {
+            clearInterval(intervalId);
+            setLoading(false);
+            toast.success("Success!");
+            router.refresh();
+          } else if (data.status === "3") {
+            clearInterval(intervalId);
+            setLoading(false);
+            toast.error("Image Generator Failed!");
+          } 
+        }, 10000)
+        
       }
     } catch (e) {
       console.log("gen cover failed", e);

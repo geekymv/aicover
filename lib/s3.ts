@@ -48,7 +48,8 @@ export async function downloadImage(imageUrl: string): Promise<ArrayBuffer> {
 export async function downloadAndUploadImage(
   imageUrl: string,
   bucketName: string,
-  s3Key: string
+  s3Key: string,
+  contentType: string = "image/png"
 ) {
   try {
     const response = await fetch(imageUrl);
@@ -63,11 +64,12 @@ export async function downloadAndUploadImage(
       Bucket: bucketName,
       Key: s3Key,
       Body: buffer,
+      ContentType: contentType,
     };
 
     return s3.send(new PutObjectCommand(uploadParams));
   } catch (e) {
-    console.log("upload failed:", e);
+    console.log(`upload ${imageUrl} failed:`, e);
     throw e;
   }
 }

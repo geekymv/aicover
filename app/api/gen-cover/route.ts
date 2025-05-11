@@ -14,6 +14,7 @@ import { getUserCredits } from "@/services/order";
 import { insertCover } from "@/models/cover";
 import { replicate } from "@ai-sdk/replicate";
 import { createOpenAI, openai } from "@ai-sdk/openai";
+import { tuziChatCompletion } from "@/services/tuzi";
 
 export const runtime = "edge";
 
@@ -44,14 +45,95 @@ export async function POST(req: Request) {
 
     // const cover = await genCoverWithOpenAI(description, user);
     // const cover = await genCoverWithReplicate(description, user_info);
-    const cover = await genCoverWithTogether(description, user_info);
+    // const cover = await genCoverWithTogether(description, user_info);
+    // const cover = await genCoverWithTuzi(description, user_info);
+    // await insertCover(cover);
+    const taskId = await genCoverWithExternalAPI(description);
+    return respData({taskId: taskId});
 
-    await insertCover(cover);
-
-    return respData(cover);
   } catch (e) {
-    console.log("gen cover failed: ", e);
-    return respErr("gen cover failed");
+    console.log("gen image failed: ", e);
+    return respErr("gen image failed");
+  }
+}
+
+// 调用外部图片生成API
+async function genCoverWithExternalAPI(prompt: string) {
+  try {
+    const baseUrl = process.env.NPE4J_BASE_URI;
+    const response = await fetch(`${baseUrl}/ai/image/generate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: "",
+        prompt: prompt
+      }),
+    });
+    
+    const result = await response.json();
+    
+    if (result.code === 200) {
+      console.log("task id:", result.data);
+      return result.data; // 返回任务ID
+    } else {
+      console.error("generate image failed:", result.msg);
+      throw new Error("generate image failed: " + result.msg);
+    }
+  } catch (error) {
+    console.error("invoke api faled:", error);
+    throw new Error("invoke api faled: " + error);
+  }
+}
+
+
+async function genCoverWithTuzi(description: string, user: User) {
+  const model = 'gpt-4o-image';
+  const messages = [
+    {
+      role: 'user',
+      content: [
+        {
+          type: 'text',
+          text: `一张黑白线描涂色插画，适合直接打印在标准尺寸（8.5x11英寸）的纸张上，无纸张边框。整体插画风格清新简洁，使用清晰流畅的黑色轮廓线条，无阴影、无灰阶、无颜色填充，背景纯白，便于涂色。【同时为了方便不会涂色的用户，请在右下角用小图生成一个完整的彩色版本供参考】适合人群：【6-9岁小朋友】画面描述：【${description}】`
+        }
+      ]
+    }
+  ];
+
+  try {
+    const imageUrls = await tuziChatCompletion(model, messages);
+    console.log('提取到的图片URL:', imageUrls);
+
+    const params = messages[0];
+    const created_at = new Date().toISOString();
+    const img_uuid = genUuid();
+    const img_name = `covers/${img_uuid}.png`;
+    downloadAndUploadImage(imageUrls[1], process.env.AWS_BUCKET || "", img_name);
+    console.log('upload image success')
+    const img_url = process.env.AWS_CDN_DOMAIN
+     ? `${process.env.AWS_CDN_DOMAIN}/${img_name}`
+     : `${process.env.AWS_BUCKET_DOMAIN}/${img_name}`; // Fallback to bucket domain if CDN not available  
+
+    const cover: Cover = {
+      user_email: user.email,
+      img_description: description,
+      img_size: "1024x1024",
+      img_url: img_url,
+      llm_name: model,
+      llm_params: JSON.stringify(params),
+      created_at: created_at,
+      uuid: img_uuid,
+      status: 1,
+      user_uuid: user.uuid,
+    };
+
+    return cover;
+
+  } catch (error) {
+    console.error("Generated image error:", error);
+    throw new Error("Generated image failed");
   }
 }
 
