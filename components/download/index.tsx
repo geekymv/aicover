@@ -27,7 +27,7 @@ export default function ({ cover }: { cover: Cover }) {
     */
     e.preventDefault();
     try {
-      const response = await fetch(cover.img_url);
+      const response = await fetch(`/api/download?url=${encodeURIComponent(cover.img_url)}`);
       const blob = await response.blob();
       const downloadUrl = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
