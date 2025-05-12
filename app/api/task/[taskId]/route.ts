@@ -44,8 +44,8 @@ export async function GET(
             const img_uuid = genUuid();
             const today = `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}`;
             const img_name = `covers/${today}/${img_uuid}.png`;
-            downloadAndUploadImage(imageUrls[1], process.env.AWS_BUCKET || "", img_name);
-            console.log('upload image success')
+            const uploadResult = await downloadAndUploadImage(imageUrls[1], process.env.AWS_BUCKET || "", img_name);
+            console.log('upload image result: ', uploadResult);
             const img_url = process.env.AWS_CDN_DOMAIN
             ? `${process.env.AWS_CDN_DOMAIN}/${img_name}`
             : `${process.env.AWS_BUCKET_DOMAIN}/${img_name}`; // Fallback to bucket domain if CDN not available  
