@@ -23,14 +23,14 @@ export default function () {
                 target="_blank"
                 className="font-inter font-light text-gray-500"
               >
-                npe4j.com
+                Npe4j
               </a>
               <a
-                href="https://space.bilibili.com/283633806"
+                href="https://getaitools.app"
                 target="_blank"
                 className="font-inter font-light text-gray-500"
               >
-                bilibili
+                GetAITools
               </a>
             </div>
             <div className="my-5 mr-8 flex max-w-[200px] grow basis-[100px] flex-col space-y-5 lg:mx-10 lg:mt-0">
