@@ -9,17 +9,19 @@ import { useContext } from "react";
 import { useRouter } from "next/navigation";
 
 export default function ({ cover }: { cover: Cover }) {
-  const { user } = useContext(AppContext);
+  // const { user } = useContext(AppContext);
+  const router = useRouter();
 
   const handleDownload = async (e: any) => {
+    /*
     if (user === null) {
       toast.error("Please login");
+      router.push("/sign-in");
       return;
     }
     if (!user) {
       return;
     }
-    /*
     if (!user.credits || user.credits.left_credits <= 0) {
       toast.error("余额不足，请先充值");
       return;

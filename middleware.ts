@@ -13,6 +13,7 @@ export default authMiddleware({
     "/covers/random",
     "/api/get-covers",
     "/api/get-user-info",
+    "/api/download",
   ],
 
   afterAuth(auth, req, evt) {
