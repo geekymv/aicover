@@ -11,8 +11,8 @@ export default function () {
   const pathname = usePathname();
   const navigations: Nav[] = [
     {
-      name: "home",
-      title: "Home",
+      name: "coloring Page Generator",
+      title: "Coloring Page Generator",
       url: "/",
       target: "_self",
       active: pathname === "/",
