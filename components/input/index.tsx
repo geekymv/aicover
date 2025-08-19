@@ -13,6 +13,9 @@ export default function () {
   const [description, setDiscription] = useState("");
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [progress, setProgress] = useState(0);
+  const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const handleInputKeydown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter" && !e.shiftKey) {
@@ -50,6 +53,16 @@ export default function () {
       };
 
       setLoading(true);
+      setProgress(5);
+      // 启动前端估算进度（最多到 95%，完成时置为 100%）
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      progressIntervalRef.current = setInterval(() => {
+        setProgress((prev) => {
+          if (prev < 85) return Math.min(prev + 2, 85);
+          if (prev < 95) return Math.min(prev + 1, 95);
+          return prev;
+        });
+      }, 2000);
       const resp = await fetch("/api/gen-cover", {
         method: "POST",
         headers: {
@@ -63,12 +76,17 @@ export default function () {
       if (resp.status === 401) {
         toast.error("Please login");
         router.push("/sign-in");
+        if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+        if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+        setLoading(false);
         return;
       }
       console.log("gen image resp", resp);
 
       if (code !== 0) {
         toast.error(message);
+        if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+        if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
         setLoading(false);
         return;
       }
@@ -79,7 +97,8 @@ export default function () {
       if (data) {
         console.log("new cover", data);
         var taskId = data.taskId;
-        var intervalId = setInterval(async () => {
+        if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+        pollIntervalRef.current = setInterval(async () => {
           const resp = await fetch(`/api/task/${taskId}`, {
             method: "GET",
             headers: {
@@ -92,20 +111,26 @@ export default function () {
             return;
           }
           if (data.status === "2") {
-            clearInterval(intervalId);
+            if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+            if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+            setProgress(100);
             setLoading(false);
             toast.success("Success!");
             router.refresh();
           } else if (data.status === "3") {
-            clearInterval(intervalId);
+            if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+            if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
             setLoading(false);
             toast.error("Image Generator Failed!");
           } 
-        }, 10000)
+        }, 20_000)
         
       }
     } catch (e) {
       console.log("gen cover failed", e);
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+      setLoading(false);
     }
   };
 
@@ -118,6 +143,14 @@ export default function () {
       }
     }
   }, [description]);
+
+  useEffect(() => {
+    // 卸载时清理定时器
+    return () => {
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+    };
+  }, []);
 
   return (
     <div className="relative max-w-2xl mx-auto mt-4 md:mt-16">
@@ -144,6 +177,19 @@ export default function () {
         >
           Generate
         </button>
+      )}
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-[320px] rounded-lg bg-white p-6 text-center shadow-lg">
+            <div className="mx-auto mb-4 relative h-16 w-16">
+              <div className="absolute inset-0 rounded-full border-4 border-gray-200"></div>
+              <div className="absolute inset-0 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
+              <div className="absolute inset-0 flex items-center justify-center text-lg font-semibold text-[#333333]">{progress}%</div>
+            </div>
+            <div className="mb-1 text-base font-medium text-[#333333]">正在生成中，请勿刷新页面</div>
+            <div className="text-sm text-gray-500">生成需要一定时间，请耐心等待…</div>
+          </div>
+        </div>
       )}
     </div>
   );
