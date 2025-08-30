@@ -36,12 +36,11 @@ export async function POST(req: Request) {
       return respErr("no auth");
     }
 
-    /*
+    // 检查用户积分
     const user_credits = await getUserCredits(user_info.email);
     if (!user_credits || user_credits.left_credits < 1) {
       return respErr("credits not enough");
     }
-    */
 
     // const cover = await genCoverWithOpenAI(description, user);
     // const cover = await genCoverWithReplicate(description, user_info);
