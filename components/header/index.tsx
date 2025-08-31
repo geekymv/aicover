@@ -18,6 +18,13 @@ export default function () {
       active: pathname === "/",
     },
     {
+      name: "gallery",
+      title: "Gallery",
+      url: "/gallery",
+      target: "_self",
+      active: pathname === "/gallery",
+    },
+    {
       name: "pricing",
       title: "Pricing",
       url: "/pricing",
