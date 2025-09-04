@@ -20,7 +20,7 @@ const tiers = [
     plan: "one-time",
     amount: 399,
     currency: "usd",
-    credits: 30,
+    credits: 50,
     features: [
       "50 Credits",
       "Credits lifetime access",
