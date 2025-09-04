@@ -48,7 +48,9 @@
     "stripe": "^14.14.0",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "dodopayments": "^0.19.0",
+    "standardwebhooks": "^1.0.0"
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "^1.13.2",

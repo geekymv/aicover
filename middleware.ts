@@ -15,6 +15,7 @@ export default authMiddleware({
     "/api/get-covers",
     "/api/get-user-info",
     "/api/download",
+    "/api/webhook",
   ],
 
   afterAuth(auth, req, evt) {

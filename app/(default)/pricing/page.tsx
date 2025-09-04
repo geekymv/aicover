@@ -11,63 +11,65 @@ export const runtime = "edge";
 
 const tiers = [
   {
-    name: "Free",
-    id: "free",
+    name: "Small Pack",
+    id: "small",
+    productId: "pdt_E9ZadRXyaXpm1xZQ32hoa",
     href: "#",
-    priceMonthly: "$0",
-    unit: "forever",
-    plan: "free",
-    amount: 0,
+    priceMonthly: "$3.99",
+    unit: "lifetime",
+    plan: "one-time",
+    amount: 399,
     currency: "usd",
-    credits: 5,
-    description: "Start creating for free",
+    credits: 30,
     features: [
-      "1 coloring pages",
-      "Basic templates access",
-      "Standard quality",
-      "PNG download format",
-      "Community support",
+      "50 Credits",
+      "Credits lifetime access",
+      "All AI models access",
+      "Private generation",
+      "No watermark outputs",
+      "Priority support"
     ],
     featured: false,
   },
   {
-    name: "Basic",
-    id: "basic",
+    name: "Medium Pack",
+    id: "medium",
+    productId: "pdt_sIDbkBVwcPrSOzxmBnBmf",
     href: "#",
-    priceMonthly: "$4.99",
-    unit: "per month",
-    plan: "monthly",
-    amount: 499,
+    priceMonthly: "$9.99",
+    unit: "lifetime",
+    plan: "one-time",
+    amount: 999,
     currency: "usd",
-    credits: 100,
-    description: "Perfect for casual users",
+    credits: 200,
     features: [
-      "Generate 100 coloring pages per month",
-      "Access to basic templates",
-      "Standard generation speed",
-      "Download in PNG format",
-      "Basic customization options",
+      "200 Credits",
+      "Credits lifetime access",
+      "All AI models access",
+      "Private generation",
+      "No watermark outputs",
+      "Priority support"
     ],
     featured: true,
   },
   {
-    name: "Pro",
-    id: "pro",
+    name: "Large Pack",
+    id: "large",
+    productId: "pdt_aLUDNcf5Pa6heH8ekpGCq",
     href: "#",
-    priceMonthly: "$9.99",
-    unit: "per month",
-    plan: "monthly",
-    amount: 999,
+    priceMonthly: "$19.99",
+    unit: "lifetime",
+    plan: "one-time",
+    amount: 1999,
     currency: "usd",
-    credits: 999999,
-    description: "For professional creators",
+    credits: 500,
     features: [
-      "Unlimited coloring pages",
-      "Access to all premium templates",
-      "Priority generation speed",
-      "Download in multiple formats",
-      "Advanced customization options",
-      "Priority customer support",
+      "500 Credits",
+      "Credits lifetime access",
+      "All AI models access",
+      "Private generation",
+      "No watermark outputs",
+      "Priority support"
     ],
     featured: false,
   },
@@ -85,7 +87,8 @@ export default function () {
     plan: string,
     amount: number,
     currency: string,
-    credits: number
+    credits: number,
+    productId: string
   ) => {
     try {
       const params = {
@@ -93,9 +96,37 @@ export default function () {
         credits: credits,
         amount: amount,
         currency: currency,
+        productId: productId,
       };
 
       setLoading(true);
+      const response = await fetch("/api/checkout/onetime", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(params),
+      });
+
+      if (response.status === 401) {
+        setLoading(false);
+
+        toast.error("need login");
+        router.push("/sign-in");
+        return;
+      }
+
+      const { code, message, data } = await response.json();
+      if (!data) {
+        setLoading(false);
+
+        toast.error(message);
+        return;
+      }
+      const { checkoutUrl } = data;
+      
+      router.push(checkoutUrl)
+      /*
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: {
@@ -140,6 +171,7 @@ export default function () {
         // 处理错误
         toast.error(result.error.message);
       }
+      */  
     } catch (e) {
       setLoading(false);
 
@@ -154,11 +186,11 @@ export default function () {
     <div className="relative isolate bg-white px-6 py-8 md:py-16 lg:px-8">
       <div className="mx-auto max-w-3xl text-center lg:max-w-4xl">
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-primary sm:text-6xl">
-          Choose Your Plan
+          Credit Packs
         </h1>
       </div>
       <h2 className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-600">
-        Select a plan that best fits your creative needs
+        Buy credits once and use them whenever you need.
       </h2>
       <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-20 sm:gap-y-0 lg:max-w-6xl lg:grid-cols-3">
         {tiers.map((tier, tierIdx) => (
@@ -188,9 +220,6 @@ export default function () {
               </span>
               <span className="text-base text-gray-500">{tier.unit}</span>
             </p>
-            <p className="mt-6 text-base leading-7 text-gray-600">
-              {tier.description}
-            </p>
             <ul
               role="list"
               className="mt-8 space-y-3 text-sm leading-6 text-gray-600 sm:mt-10"
@@ -206,18 +235,19 @@ export default function () {
               ))}
             </ul>
             <Button
-              className="mt-8 w-full"
+              className="mt-8 w-full text-white"
               disabled={loading}
               onClick={() => {
                 handleCheckout(
                   tier.plan,
                   tier.amount,
                   tier.currency,
-                  tier.credits
+                  tier.credits,
+                  tier.productId
                 );
               }}
             >
-              {loading ? "Processing..." : "Subscribe Now"}
+              {loading ? "Processing..." : "One Time Purchase"}
             </Button>
           </div>
         ))}
