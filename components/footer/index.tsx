@@ -45,16 +45,11 @@ export default function () {
           </div>
           <div className="mt-10 flex flex-col lg:mt-0">
             <div className="mb-4 flex flex-col items-center">
-              <p className="font-inter font-medium text-black">Contact author</p>
+              <p className="font-inter font-medium text-black">Contact Us</p>
               <p className="font-inter ml-4 text-black">
-                <img
-                  src={
-                    "https://oss.npe4j.com/image/qrcode_for_gh_981007824a8f_1280.jpg"
-                  }
-                  alt="qrcode"
-                  width={"180"}
-                  height={"300"}
-                />
+                <a href="mailto:geekymv2024@gmail.com">
+                  geekymv2024@gmail.com
+                </a>
               </p>
             </div>
           </div>
