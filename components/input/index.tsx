@@ -116,7 +116,7 @@ export default function () {
             setProgress(100);
             setLoading(false);
             toast.success("Success!");
-            router.refresh();
+            router.push(`/covers/latest`);
           } else if (data.status === "3") {
             if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
             if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);

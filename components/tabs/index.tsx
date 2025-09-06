@@ -4,8 +4,8 @@ function classNames(...classes: string[]) {
 
 export default function ({ cate }: { cate: string }) {
   const tabs = [
-    { name: "Latest", href: "/", current: cate === "" || cate === "latest" },
     { name: "Hottest", href: "/covers/featured", current: cate === "featured" },
+    { name: "Latest", href: "/covers/latest", current: cate === "" || cate === "latest" },
     { name: "Random", href: "/covers/random", current: cate === "random" },
   ];
 
