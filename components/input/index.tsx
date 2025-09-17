@@ -12,12 +12,12 @@ export default function () {
   const { setCovers, user, fetchUserInfo } = useContext(AppContext);
   const [description, setDiscription] = useState("");
   const [loading, setLoading] = useState(false);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const [progress, setProgress] = useState(0);
   const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const handleInputKeydown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleInputKeydown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.code === "Enter" && !e.shiftKey) {
       if (e.keyCode !== 229) {
         e.preventDefault();
@@ -152,31 +152,38 @@ export default function () {
   }, []);
 
   return (
-    <div className="relative max-w-2xl mx-auto mt-4 md:mt-16">
-      <input
-        type="text"
-        className="mb-1 h-9 w-full rounded-md border border-solid border-primary px-3 py-6 text-sm text-[#333333] focus:border-primary"
-        placeholder="Enter your prompt"
-        ref={inputRef}
-        value={description}
-        onChange={(e) => setDiscription(e.target.value)}
-        onKeyDown={handleInputKeydown}
-      />
-      {loading ? (
-        <button
-          className="relative right-0 top-[5px] w-full cursor-pointer rounded-md bg-primary px-6 py-2 text-center font-semibold text-white sm:absolute sm:right-[5px] sm:w-auto"
-          disabled
-        >
-          Generating...
-        </button>
-      ) : (
-        <button
-          className="relative right-0 top-[5px] w-full cursor-pointer rounded-md bg-primary border-primary px-6 py-2 text-center font-semibold text-white sm:absolute sm:right-[5px] sm:w-auto"
-          onClick={handleSubmit}
-        >
-          Generate
-        </button>
-      )}
+    <div className="max-w-2xl mx-auto mt-4 md:mt-16">
+      <div className="relative">
+        <textarea
+          className="mb-4 h-32 w-full rounded-md border border-solid border-primary px-3 py-4 pr-16 text-sm text-[#333333] focus:border-primary resize-none"
+          placeholder="Enter your prompt"
+          ref={inputRef}
+          value={description}
+          onChange={(e) => setDiscription(e.target.value)}
+          onKeyDown={handleInputKeydown}
+          maxLength={500}
+        />
+        <div className="absolute bottom-6 right-3 text-xs text-gray-500">
+          {description.length}/500
+        </div>
+      </div>
+      <div className="flex justify-end">
+        {loading ? (
+          <button
+            className="cursor-pointer rounded-md bg-primary px-6 py-2 text-center font-semibold text-white"
+            disabled
+          >
+            Generating...
+          </button>
+        ) : (
+          <button
+            className="cursor-pointer rounded-md bg-primary border-primary px-6 py-2 text-center font-semibold text-white"
+            onClick={handleSubmit}
+          >
+            Generate
+          </button>
+        )}
+      </div>
       {loading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="w-[320px] rounded-lg bg-white p-6 text-center shadow-lg">
