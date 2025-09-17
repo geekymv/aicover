@@ -16,6 +16,7 @@ export default async function GalleryPage({ params }: { params: { page: string }
 
   const buildPageHref = (p: number) => `/gallery/page/${p}`;
 
+  // Desktop pagination window
   const pageNumbers: number[] = [];
   const windowSize = 5;
   const start = Math.max(1, currentPage - Math.floor(windowSize / 2));
@@ -52,7 +53,38 @@ export default async function GalleryPage({ params }: { params: { page: string }
           ))}
         </div>
 
-        <div className="mt-10 flex items-center justify-center gap-2">
+        {/* Mobile: Load more */}
+        <div className="mt-10 text-center sm:hidden">
+          {currentPage < totalPages ? (
+            <a
+              href={buildPageHref(currentPage + 1)}
+              className="inline-flex items-center gap-2 rounded-md border border-primary bg-primary/5 px-5 py-2 text-primary transition hover:bg-primary/10 hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+              aria-label="Load more coloring pages"
+            >
+              <span>Load more</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-4 w-4"
+                aria-hidden
+              >
+                <path d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          ) : (
+            <div className="inline-flex items-center px-4 py-2 text-sm text-gray-500 bg-primary/5 rounded-md">
+              No more pages
+            </div>
+          )}
+        </div>
+
+        {/* Desktop: numbered pagination */}
+        <nav className="mt-10 hidden sm:flex items-center justify-center gap-2" aria-label="Pagination Navigation">
           <a
             href={buildPageHref(Math.max(1, currentPage - 1))}
             className={`px-3 py-2 rounded-md text-sm ${currentPage === 1 ? "pointer-events-none opacity-40 bg-primary/10 text-primary" : "bg-primary/10 text-primary hover:bg-primary/20"}`}
@@ -93,7 +125,7 @@ export default async function GalleryPage({ params }: { params: { page: string }
           >
             Next
           </a>
-        </div>
+        </nav>
       </div>
     </div>
   );
