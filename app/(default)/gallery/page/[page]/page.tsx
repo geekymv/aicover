@@ -3,11 +3,14 @@ import { Cover } from "@/types/cover";
 
 export const runtime = "edge";
 
-export default async function GalleryIndexPage() {
+export default async function GalleryPage({ params }: { params: { page: string } }) {
   const limit = 20;
-  const currentPage = 1;
   const totalCount = await getCoversCount();
   const totalPages = Math.max(1, Math.ceil(totalCount / limit));
+
+  let currentPage = Number(params.page) || 1;
+  if (currentPage < 1) currentPage = 1;
+  if (currentPage > totalPages) currentPage = totalPages;
 
   const covers: Cover[] = await getCovers(currentPage, limit);
 
@@ -15,7 +18,7 @@ export default async function GalleryIndexPage() {
 
   const pageNumbers: number[] = [];
   const windowSize = 5;
-  const start = 1;
+  const start = Math.max(1, currentPage - Math.floor(windowSize / 2));
   const end = Math.min(totalPages, start + windowSize - 1);
   for (let i = start; i <= end; i++) pageNumbers.push(i);
 
@@ -51,12 +54,19 @@ export default async function GalleryIndexPage() {
 
         <div className="mt-10 flex items-center justify-center gap-2">
           <a
-            href={buildPageHref(1)}
-            className={`px-3 py-2 rounded-md text-sm pointer-events-none opacity-40 bg-primary/10 text-primary`}
-            aria-disabled
+            href={buildPageHref(Math.max(1, currentPage - 1))}
+            className={`px-3 py-2 rounded-md text-sm ${currentPage === 1 ? "pointer-events-none opacity-40 bg-primary/10 text-primary" : "bg-primary/10 text-primary hover:bg-primary/20"}`}
+            aria-disabled={currentPage === 1}
           >
             Prev
           </a>
+
+          {start > 1 && (
+            <a href={buildPageHref(1)} className="px-3 py-2 rounded-md text-sm bg-primary/5 text-primary hover:bg-primary/10">
+              1
+            </a>
+          )}
+          {start > 2 && <span className="px-2 text-gray-500">…</span>}
 
           {pageNumbers.map((p) => (
             <a
