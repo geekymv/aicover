@@ -5,6 +5,8 @@ export default authMiddleware({
   publicRoutes: [
     "/",
     "/gallery",
+    "/gallery/page",
+    "/gallery/page/(.*)",
     "/privacy-policy",
     "/terms-of-service",
     "/pricing",
