@@ -15,6 +15,8 @@ import { insertCover } from "@/models/cover";
 import { replicate } from "@ai-sdk/replicate";
 import { createOpenAI, openai } from "@ai-sdk/openai";
 import { tuziChatCompletion } from "@/services/tuzi";
+import { insertTask } from "@/models/task";
+import { TaskStatus } from "@/types/task";
 
 export const runtime = "edge";
 
@@ -26,7 +28,7 @@ export async function POST(req: Request) {
   const user_email = user.emailAddresses[0].emailAddress;
 
   try {
-    const { description } = await req.json();
+    const { description, aspectRatio, outputs } = await req.json();
     if (!description) {
       return respErr("invalid params");
     }
@@ -38,7 +40,7 @@ export async function POST(req: Request) {
 
     // 检查用户积分
     const user_credits = await getUserCredits(user_info.email);
-    if (!user_credits || user_credits.left_credits < 1) {
+    if (!user_credits || user_credits.left_credits < outputs) {
       return respErr("credits not enough");
     }
 
@@ -47,7 +49,7 @@ export async function POST(req: Request) {
     // const cover = await genCoverWithTogether(description, user_info);
     // const cover = await genCoverWithTuzi(description, user_info);
     // await insertCover(cover);
-    const taskId = await genCoverWithExternalAPI(description);
+    const taskId = await genCoverWithExternalAPI(user_info, description, aspectRatio, outputs);
     return respData({taskId: taskId});
 
   } catch (e) {
@@ -57,25 +59,42 @@ export async function POST(req: Request) {
 }
 
 // 调用外部图片生成API
-async function genCoverWithExternalAPI(prompt: string) {
+async function genCoverWithExternalAPI(user_info: User, prompt: string, aspectRatio: string, outputs: number) {
   try {
     const baseUrl = process.env.NPE4J_BASE_URI;
+    const params = JSON.stringify({
+      model: "gpt-4o-image",
+      prompt: prompt,
+      aspectRatio: aspectRatio,
+      outputs: outputs,
+      taskType: "1" // 简笔画
+    });
     const response = await fetch(`${baseUrl}/ai/image/generate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        model: "",
-        prompt: prompt
-      }),
+      body: params,
     });
     
     const result = await response.json();
-    
+    console.log('genCoverWithExternalAPI result = ', result);
+    // 消耗积分数量
+    let credits = outputs <= 2 ? outputs : 3;
     if (result.code === 200) {
       console.log("task id:", result.data);
-      return result.data; // 返回任务ID
+      const task = {
+        uuid: result.data,
+        created_at: new Date().toISOString(),
+        credits: credits,
+        params: params,
+        user_uuid: user_info.uuid,
+        status: TaskStatus.ON_GOING,
+      };
+      await insertTask(task);
+
+      return task.uuid; // 返回任务ID
+      
     } else {
       console.error("generate image failed:", result.msg);
       throw new Error("generate image failed: " + result.msg);

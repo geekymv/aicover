@@ -46,3 +46,14 @@ ADD CONSTRAINT fk_user_email
 FOREIGN KEY (user_email)
 REFERENCES users(email)
 ON DELETE CASCADE;
+
+
+CREATE TABLE tasks (
+    id SERIAL PRIMARY KEY,
+    uuid VARCHAR(255) UNIQUE NOT NULL,
+    created_at timestamptz,
+    credits INT NOT NULL,
+    user_uuid UUID,
+    params VARCHAR(2048),
+    status INT
+);

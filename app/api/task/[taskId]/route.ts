@@ -7,6 +7,8 @@ import { User } from "@/types/user";
 import { currentUser } from "@clerk/nextjs";
 import { findUserByEmail } from "@/models/user";
 import { insertCover } from "@/models/cover";
+import { findTaskByTaskId } from '@/models/task'
+import { Task } from "@/types/task";
 
 export async function GET(
   request: NextRequest,
@@ -25,6 +27,17 @@ export async function GET(
   try {
     const taskId = params.taskId;
     console.log(`Get task status: ${taskId}`);
+
+    const task = await findTaskByTaskId(taskId)
+    if (!task) {
+      return respErr("task not found");
+    }
+
+    return respData({
+      status: task.status
+    }); 
+
+    /*
     const baseUrl = process.env.NPE4J_BASE_URI;
     // 调用外部服务接口获取任务状态
     const response = await fetch(`${baseUrl}/ai/image/tasks/${taskId}`, {
@@ -69,7 +82,7 @@ export async function GET(
             status: result.data.status,
         });
     }
-    
+    */
   } catch (e) {
     console.log("gen image failed: ", e);
     return respErr("gen image failed");     

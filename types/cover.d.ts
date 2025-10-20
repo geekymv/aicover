@@ -17,4 +17,5 @@ export interface Cover {
   is_uploaded?: boolean;
   is_awesome?: boolean;
   is_brand?: boolean;
+  task_id?: string;
 }

@@ -16,6 +16,10 @@ export default function () {
   const [progress, setProgress] = useState(0);
   const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [aspectRatio, setAspectRatio] = useState<
+    "1:1" | "2:3" | "3:2"
+  >("2:3");
+  const [outputs, setOutputs] = useState<number>(1);
 
   const handleInputKeydown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.code === "Enter" && !e.shiftKey) {
@@ -49,6 +53,8 @@ export default function () {
     try {
       const params = {
         description: description,
+        aspectRatio: aspectRatio,
+        outputs: outputs,
       };
 
       setLoading(true);
@@ -109,14 +115,14 @@ export default function () {
             toast.error(message);
             return;
           }
-          if (data.status === "2") {
+          if (data.status === 2) {
             if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
             if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
             setProgress(100);
             setLoading(false);
             toast.success("Success!");
             router.push(`/covers/latest`);
-          } else if (data.status === "3") {
+          } else if (data.status === 3) {
             if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
             if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
             setLoading(false);
@@ -165,6 +171,47 @@ export default function () {
         />
         <div className="absolute bottom-6 right-3 text-xs text-gray-500">
           {description.length}/500
+        </div>
+      </div>
+      <div className="mt-4 space-y-4">
+        <div>
+          <div className="mb-2 text-sm font-medium text-[#333333]">Image Dimensions</div>
+          <div className="flex flex-wrap gap-2">
+            {["1:1", "2:3", "3:2"].map((ratio) => (
+              <button
+                key={ratio}
+                type="button"
+                className={`px-3 py-2 rounded-md text-sm border ${
+                  aspectRatio === ratio
+                    ? "bg-primary text-white border-primary"
+                    : "border-gray-200 text-[#333333] hover:border-primary"
+                }`}
+                onClick={() => setAspectRatio(ratio as any)}
+              >
+                {ratio}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="mb-2 text-sm font-medium text-[#333333]">Number of Outputs</div>
+          <div className="flex flex-wrap gap-2">
+            {[1, 2, 4].map((n) => (
+              <button
+                key={n}
+                type="button"
+                className={`w-10 py-2 rounded-md text-sm border text-center ${
+                  outputs === n
+                    ? "bg-primary text-white border-primary"
+                    : "border-gray-200 text-[#333333] hover:border-primary"
+                }`}
+                onClick={() => setOutputs(n)}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
       <div className="flex justify-end">

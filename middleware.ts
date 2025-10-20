@@ -18,6 +18,7 @@ export default authMiddleware({
     "/api/get-user-info",
     "/api/download",
     "/api/webhook",
+    "/api/task/result/(.*)",
   ],
 
   afterAuth(auth, req, evt) {
