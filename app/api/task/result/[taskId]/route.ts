@@ -52,6 +52,7 @@ export async function POST(
         uuid: img_uuid,
         status: 1,
         user_uuid: userInfo?.uuid,
+        task_id: taskId,
       };
       await insertCover(cover);
     }
