@@ -3,7 +3,7 @@ import { getUserOrders, updateOrderStatus } from "@/models/order";
 import { Order } from "@/types/order";
 import Stripe from "stripe";
 import { UserCredits } from "@/types/user";
-import { getUserCoversCount } from "@/models/cover";
+import { getUsedCreditsByEmail } from "@/models/task";
 
 export async function handleOrderSession(session_id: string) {
   const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY || "");
@@ -40,7 +40,8 @@ export async function getUserCredits(user_email: string): Promise<UserCredits> {
   };
 
   try {
-    const used_credits = await getUserCoversCount(user_email);
+    const used_credits = await getUsedCreditsByEmail(user_email);
+    
     user_credits.used_credits = Number(used_credits);
 
     const orders = await getUserOrders(user_email);

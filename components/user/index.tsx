@@ -37,8 +37,8 @@ export default function ({ user }: Props) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        <DropdownMenuCheckboxItem className="md:hidden text-center">
-          额度: {user.credits?.left_credits}
+        <DropdownMenuCheckboxItem className="text-center">
+          Credits: {user.credits?.left_credits}
         </DropdownMenuCheckboxItem>
         <DropdownMenuSeparator className="md:hidden" />
 
