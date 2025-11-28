@@ -15,6 +15,7 @@ const nextConfig = {
       "r2.trys.ai",
       "6e5237d5b06eb4cdecb2100b511fde81.r2.cloudflarestorage.com",
       "oss.npe4j.com",
+      "cdn.icoloring.ai",
     ],
   },
 };

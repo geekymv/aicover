@@ -19,6 +19,8 @@ export default authMiddleware({
     "/api/download",
     "/api/webhook",
     "/api/task/result/(.*)",
+    "/image-to-coloring-page",
+    "/api/upload-coloring"
   ],
 
   afterAuth(auth, req, evt) {

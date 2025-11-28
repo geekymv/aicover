@@ -22,6 +22,13 @@ export default function () {
       active: pathname === "/",
     },
     {
+      name: "image-to-coloring",
+      title: "Image to Coloring Page",
+      url: "/image-to-coloring-page",
+      target: "_self",
+      active: pathname === "/image-to-coloring-page",
+    },
+    {
       name: "gallery",
       title: "Gallery",
       url: "/gallery",
