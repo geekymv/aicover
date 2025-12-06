@@ -44,11 +44,11 @@ export default function RootLayout({
                       `,
             }}
           ></script>
-          <script
+          <script 
             async 
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5740628290206170"
-            crossorigin="anonymous">
-          </script>
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5740628290206170" 
+            crossOrigin="anonymous"></script>
+            
         </head>
         <body className={inter.className}>
           <Toaster position="top-center" richColors />
