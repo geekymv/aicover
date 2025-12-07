@@ -16,6 +16,7 @@ export default function () {
   const [progress, setProgress] = useState(0);
   const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [taskType, setTaskType] = useState<"Line Art" | "Simple Sketch">("Line Art");
   const [aspectRatio, setAspectRatio] = useState<
     "1:1" | "2:3" | "3:2"
   >("2:3");
@@ -53,6 +54,7 @@ export default function () {
     try {
       const params = {
         description: description,
+        taskType: taskType,
         aspectRatio: aspectRatio,
         outputs: outputs,
       };
@@ -174,6 +176,25 @@ export default function () {
         </div>
       </div>
       <div className="mt-4 space-y-4">
+        <div>
+          <div className="mb-2 text-sm font-medium text-[#333333]">Select Styles</div>
+          <div className="flex flex-wrap gap-2">
+            {["Line Art", "Simple Sketch"].map((style) => (
+              <button
+                key={style}
+                type="button"
+                className={`px-3 py-2 rounded-md text-sm border ${
+                  taskType === style
+                    ? "bg-primary text-white border-primary"
+                    : "border-gray-200 text-[#333333] hover:border-primary"
+                }`}
+                onClick={() => setTaskType(style as "Line Art" | "Simple Sketch")}
+              >
+                {style}
+              </button>
+            ))}
+          </div>
+        </div>
         <div>
           <div className="mb-2 text-sm font-medium text-[#333333]">Image Dimensions</div>
           <div className="flex flex-wrap gap-2">

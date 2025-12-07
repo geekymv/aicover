@@ -28,7 +28,7 @@ export async function POST(req: Request) {
   const user_email = user.emailAddresses[0].emailAddress;
 
   try {
-    const { description, aspectRatio, outputs } = await req.json();
+    const { description, taskType, aspectRatio, outputs } = await req.json();
     if (!description) {
       return respErr("invalid params");
     }
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     // const cover = await genCoverWithTogether(description, user_info);
     // const cover = await genCoverWithTuzi(description, user_info);
     // await insertCover(cover);
-    const taskId = await genCoverWithExternalAPI(user_info, description, aspectRatio, outputs);
+    const taskId = await genCoverWithExternalAPI(user_info, description, taskType, aspectRatio, outputs);
     return respData({taskId: taskId});
 
   } catch (e) {
@@ -59,15 +59,18 @@ export async function POST(req: Request) {
 }
 
 // 调用外部图片生成API
-async function genCoverWithExternalAPI(user_info: User, prompt: string, aspectRatio: string, outputs: number) {
+async function genCoverWithExternalAPI(user_info: User, prompt: string, taskType: string, aspectRatio: string, outputs: number) {
   try {
     const baseUrl = process.env.NPE4J_BASE_URI;
+    // 将前端传入的样式名称映射为后端需要的值
+    // Line Art -> "0", Simple Sketch -> "1" (根据实际需求调整)
+    const taskTypeValue = taskType === "Line Art" ? "0" : "1";
     const params = JSON.stringify({
       model: "gpt-4o-image",
       prompt: prompt,
       aspectRatio: aspectRatio,
       outputs: outputs,
-      taskType: "1" // 简笔画
+      taskType: taskTypeValue
     });
     const response = await fetch(`${baseUrl}/ai/image/generate`, {
       method: 'POST',
