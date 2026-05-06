@@ -19,6 +19,13 @@ export default function () {
             <div className="my-5 mr-8 flex max-w-[200px] grow basis-[100px] flex-col space-y-5 lg:mx-10 lg:mt-0">
               <p className="font-inter font-medium text-black">Other Product</p>
               <a
+                href="https://kickaluckyblock.io"
+                target="_blank"
+                className="font-inter font-light text-gray-500"
+              >
+                Kick a Lucky Block
+              </a>
+              <a
                 href="https://happyaihorse.com"
                 target="_blank"
                 className="font-inter font-light text-gray-500"
